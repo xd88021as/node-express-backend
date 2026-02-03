@@ -10,6 +10,6 @@ export const AppDataSource = new DataSource({
   username: ENV.DB_USERNAME,
   password: ENV.DB_PASSWORD,
   database: ENV.DB_DATABASE,
-  synchronize: true,
+  synchronize: ENV.ENVIRONMENT === 'production',
   entities: [...entities],
 });
