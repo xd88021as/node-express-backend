@@ -1,0 +1,13 @@
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -t
+      - asia-east1-docker.pkg.dev/$PROJECT_ID/node-express-backend/finding-lost-magic:$COMMIT_SHA
+      - .
+
+images:
+  - asia-east1-docker.pkg.dev/$PROJECT_ID/node-express-backend/finding-lost-magic:$COMMIT_SHA
