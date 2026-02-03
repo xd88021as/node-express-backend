@@ -7,7 +7,6 @@ import { setupSwagger } from '@config/swagger';
 import { AppDataSource } from '@database/data-source';
 import routes from './routes';
 import { errorHandler } from '@middlewares/error-handler';
-import path from 'path';
 
 async function startServer() {
   const app = express();
