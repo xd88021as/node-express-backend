@@ -39,7 +39,7 @@ async function startServer() {
 
   const server = http.createServer(app);
 
-  AppDataSource.initialize()
+  await AppDataSource.initialize()
     .then(async () => {
       console.log('[Database] Connected.');
     })
