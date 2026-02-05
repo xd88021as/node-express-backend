@@ -8,6 +8,7 @@ import { AppDataSource } from '@database/data-source';
 import routes from './routes';
 import { errorHandler } from '@middlewares/error-handler';
 import { entities } from '@database/entities';
+import { seedRole } from '@database/seed';
 
 async function startServer() {
   const app = express();
@@ -44,6 +45,7 @@ async function startServer() {
     .then(async () => {
       console.log('[DB] entities count =', entities.length);
       console.log('[Database] Connected.');
+      await seedRole();
     })
     .catch((err) => {
       console.error('[Database] Connection failed:', err);
