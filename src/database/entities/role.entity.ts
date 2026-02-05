@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
 
-export type RoleName = 'player' | 'admin' | 'tester';
+export type RoleName = 'user' | 'admin' | 'tester';
 
 @Entity('role')
 export class RoleEntity {
