@@ -1,14 +1,41 @@
-options:
-  logging: CLOUD_LOGGING_ONLY
+substitutions:
+  _SERVICE: finding-lost-magic-api
+  _REGION: asia-east1
+  _REPO: node-express-backend
+  _IMAGE: finding-lost-magic
 
 steps:
-  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
-    entrypoint: gcloud
-    args:
-      - run
-      - deploy
-      - finding-lost-magic-api
-      - --image=asia-east1-docker.pkg.dev/$PROJECT_ID/node-express-backend/finding-lost-magic:$COMMIT_SHA
-      - --region=asia-east1
-      - --platform=managed
-      - --quiet
+# 1️⃣ Build
+- name: gcr.io/cloud-builders/docker
+  args:
+    [
+      "build",
+      "-t",
+      "asia-east1-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_IMAGE}:$SHORT_SHA",
+      "."
+    ]
+
+# 2️⃣ Push
+- name: gcr.io/cloud-builders/docker
+  args:
+    [
+      "push",
+      "asia-east1-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_IMAGE}:$SHORT_SHA"
+    ]
+
+# 3️⃣ Deploy（⚠️ image 跟上面一定要一模一樣）
+- name: gcr.io/google.com/cloudsdktool/cloud-sdk
+  args:
+    [
+      "gcloud",
+      "run",
+      "deploy",
+      "${_SERVICE}",
+      "--image",
+      "asia-east1-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_IMAGE}:$SHORT_SHA",
+      "--region",
+      "${_REGION}",
+      "--platform",
+      "managed",
+      "--allow-unauthenticated"
+    ]
