@@ -1,6 +1,3 @@
-options:
-  logging: CLOUD_LOGGING_ONLY
-
 steps:
   - name: gcr.io/cloud-builders/docker
     args:
@@ -9,5 +6,18 @@ steps:
       - asia-east1-docker.pkg.dev/$PROJECT_ID/node-express-backend/finding-lost-magic:$COMMIT_SHA
       - .
 
-images:
-  - asia-east1-docker.pkg.dev/$PROJECT_ID/node-express-backend/finding-lost-magic:$COMMIT_SHA
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - asia-east1-docker.pkg.dev/$PROJECT_ID/node-express-backend/finding-lost-magic:$COMMIT_SHA
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - finding-lost-magic-api
+      - --image=asia-east1-docker.pkg.dev/$PROJECT_ID/node-express-backend/finding-lost-magic:$COMMIT_SHA
+      - --region=asia-east1
+      - --platform=managed
+      - --quiet
