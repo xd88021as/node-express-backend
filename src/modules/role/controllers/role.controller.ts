@@ -1,5 +1,5 @@
 import { checkNotFound } from '@utils/http-error.util';
-import { RoleResponseDTO } from '../dto/role-response.dto';
+import { RoleResponseDTO } from '../dtos/role-response.dto';
 import { RoleService } from '../services/role.service';
 
 export class RoleController {
