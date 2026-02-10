@@ -1,7 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
 
-export type RoleName = 'user' | 'admin' | 'tester';
-
 @Entity('role')
 export class RoleEntity {
   @PrimaryGeneratedColumn('increment')
@@ -9,5 +7,5 @@ export class RoleEntity {
 
   @Column({ type: 'varchar', length: 255, unique: true })
   @Index()
-  name!: RoleName;
+  name!: string;
 }

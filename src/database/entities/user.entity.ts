@@ -19,11 +19,14 @@ export class UserEntity {
   @Index()
   uuid!: string;
 
-  @Column({ type: 'varchar', length: 255, unique: true, nullable: false })
+  @Column({ type: 'varchar', length: 255, unique: true })
   account!: string;
 
   @Column({ type: 'varchar', length: 255 })
   password!: string;
+
+  @Column({ type: 'text' })
+  name!: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   nickname?: string;
@@ -31,7 +34,13 @@ export class UserEntity {
   @Column({ type: 'text', nullable: true })
   introduction?: string;
 
-  @Column({ type: 'varchar', length: 10, default: 'en-US' })
+  @Column({ type: 'numeric', precision: 20, scale: 2, default: '0.00' })
+  balance!: string;
+
+  @Column({ type: 'varchar', length: 20, default: 'TWD' })
+  currency!: string;
+
+  @Column({ type: 'varchar', length: 20, default: 'zh-TW' })
   language!: string;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', name: 'created_at' })

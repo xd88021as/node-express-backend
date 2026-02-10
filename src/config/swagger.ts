@@ -1,6 +1,9 @@
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { Express } from 'express';
+import { ENV } from '@config/env';
+
+const isDev = ENV.ENVIRONMENT === 'dev';
 
 const options: swaggerJSDoc.Options = {
   definition: {
@@ -24,7 +27,7 @@ const options: swaggerJSDoc.Options = {
       },
     ],
   },
-  apis: ['dist/modules/**/*.swagger.js'],
+  apis: isDev ? ['src/modules/**/*.swagger.ts'] : ['dist/modules/**/*.swagger.js'],
 };
 
 const swaggerSpec = swaggerJSDoc(options);

@@ -1,16 +1,13 @@
-import { checkNotFound } from '@utils/http-error.util';
 import { RoleRepository } from '../repositories/role.repository';
-import { RoleName } from '@database/entities/role.entity';
 
 export class RoleService {
-  static async create(name: RoleName) {
+  static async create(name: string) {
     const role = await RoleRepository.create(name);
     return role;
   }
 
-  static async findUnique(name: RoleName) {
+  static async findUnique(name: string) {
     const role = await RoleRepository.findUnique(name);
-    checkNotFound(role, 'Role not found');
     return role;
   }
 
@@ -19,7 +16,7 @@ export class RoleService {
     return roles;
   }
 
-  static async update(id: number, name: RoleName) {
+  static async update(id: number, name: string) {
     const role = await RoleRepository.update(id, name);
     return role;
   }

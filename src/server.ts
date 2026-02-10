@@ -7,8 +7,7 @@ import { setupSwagger } from '@config/swagger';
 import { AppDataSource } from '@database/data-source';
 import routes from './routes';
 import { errorHandler } from '@middlewares/error-handler';
-import { entities } from '@database/entities';
-import { seedRole } from '@database/seed';
+import { seedRole, seedUserStatus } from '@database/seed';
 
 async function startServer() {
   const app = express();
@@ -43,8 +42,8 @@ async function startServer() {
 
   await AppDataSource.initialize()
     .then(async () => {
-      console.log('[DB] entities count =', entities.length);
       console.log('[Database] Connected.');
+      await seedUserStatus();
       await seedRole();
     })
     .catch((err) => {

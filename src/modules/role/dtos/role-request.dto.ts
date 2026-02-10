@@ -1,15 +1,14 @@
-import { RoleName } from '@database/entities/role.entity';
 import { IsString } from 'class-validator';
 
 export class RoleCreateDTO {
   @IsString()
-  name!: RoleName;
+  name!: string;
 }
 
 export class RoleUpdateDTO {
   @IsString()
-  targetName!: RoleName;
+  targetName!: string;
 
   @IsString()
-  newName!: RoleName;
+  newName!: string;
 }

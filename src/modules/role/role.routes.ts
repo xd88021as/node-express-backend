@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { plainToInstance } from 'class-transformer';
 import { RoleController } from './controllers/role.controller';
-import { RoleCreateDTO, RoleUpdateDTO } from './dto/role-request.dto';
+import { RoleCreateDTO, RoleUpdateDTO } from './dtos/role-request.dto';
 import { validateDTO } from '@middlewares/validate.middleware';
 
 const router = Router();

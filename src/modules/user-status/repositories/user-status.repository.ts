@@ -1,9 +1,9 @@
 import { AppDataSource } from '@database/data-source';
-import { RoleEntity } from '@database/entities/role.entity';
+import { UserStatusEntity } from '@database/entities/user-status.entity';
 
-const repo = AppDataSource.getRepository(RoleEntity);
+const repo = AppDataSource.getRepository(UserStatusEntity);
 
-export class RoleRepository {
+export class UserStatusRepository {
   static async create(name: string) {
     const entity = repo.create({ name });
     const savedEntity = await repo.save(entity);
