@@ -1,11 +1,11 @@
 import { UserService } from '@modules/user/services/user.service';
-import { UserStatusService } from '@modules/user/services/user-status.service';
 import { RoleService } from '@modules/role/services/role.service';
 import { AuthSignInDTO, AuthSignUpDTO } from '../dtos/auth-request.dto';
 import { AuthResponseDTO } from '../dtos/auth-response.dto';
 import { checkForbidden, checkNotFound } from '@utils/http-error.util';
 import { verifyPassword } from '@utils/crypto.util';
 import { signJwt } from '@utils/jwt.util';
+import { UserStatusService } from '@modules/user-status/services/user-status.service';
 
 export class AuthController {
   static async signIn(params: AuthSignInDTO): Promise<AuthResponseDTO> {
