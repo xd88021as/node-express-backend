@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import { QueryFailedError } from 'typeorm';
 
 const pgErrorMap: Record<string, { status: number; message: string }> = {
-  '23505': { status: 409, message: '資料重複，請確認欄位是否唯一' },
+  '23505': { status: 409, message: 'Unique欄位資料重複' },
   '23502': { status: 400, message: '缺少必要欄位' },
   '23503': { status: 400, message: '外鍵關聯錯誤，相關資料不存在' },
   '42703': { status: 500, message: '資料欄位不存在，請聯絡開發人員' },
