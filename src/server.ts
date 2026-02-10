@@ -7,7 +7,7 @@ import { setupSwagger } from '@config/swagger';
 import { AppDataSource } from '@database/data-source';
 import routes from './routes';
 import { errorHandler } from '@middlewares/error-handler';
-import path from 'path';
+import { seedRole, seedUserStatus } from '@database/seed';
 
 async function startServer() {
   const app = express();
@@ -40,16 +40,18 @@ async function startServer() {
 
   const server = http.createServer(app);
 
-  AppDataSource.initialize()
+  await AppDataSource.initialize()
     .then(async () => {
       console.log('[Database] Connected.');
+      await seedUserStatus();
+      await seedRole();
     })
     .catch((err) => {
       console.error('[Database] Connection failed:', err);
     });
 
   server.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
+    console.log(`listening on ${PORT}`);
   });
 }
 

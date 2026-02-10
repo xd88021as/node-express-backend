@@ -10,6 +10,3 @@
 | `npm run lint:fix`          | 自動修正符合規則的 ESLint 問題             |
 | `npm run format`            | 使用 Prettier 格式化所有程式碼              |
 | `npm run test`              | 執行所有 Jest 單元測試                     |
-| `npm run test:watch`        | 監控檔案變化並自動重新執行相關測試          |
-| `npm run test:cov`          | 執行測試並產出涵蓋率報告                   |
-

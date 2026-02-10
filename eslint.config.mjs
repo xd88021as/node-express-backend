@@ -60,7 +60,6 @@ export default [
       ...prettierPlugin.configs.recommended.rules,
 
       'unused-imports/no-unused-imports': 'error',
-      '@typescript-eslint/no-unused-vars': ['warn'],
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': [
         'warn',

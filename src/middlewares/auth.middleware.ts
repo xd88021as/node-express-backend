@@ -1,23 +1,19 @@
 import { Request, Response, NextFunction } from 'express';
-import { JwtUtil } from '@utils/jwt.util';
-import { TokenPayload } from '@type/token-payload';
+import { TokenPayload, verifyJwt } from '@utils/jwt.util';
+import { checkNotFound, checkUnauthorized } from '@utils/http-error.util';
+import { UserService } from '@modules/user/services/user.service';
 
-export async function verifyHttpJWT(req: Request, res: Response, next: NextFunction) {
-  const authHeader = req.headers.authorization;
-  const token = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null;
-
-  if (!token) {
-    return res.status(401).json({ message: 'Unauthorized: No token provided' });
-  }
-
+export async function authMiddleware(req: Request, res: Response, next: NextFunction) {
   try {
-    const decoded: TokenPayload = JwtUtil.verify(token);
-
+    const token = req.headers.authorization?.split(' ')[1];
+    const payload = token ? verifyJwt(token) : null;
+    checkUnauthorized(payload, 'Invalid token');
+    const user = await UserService.findUnique({ uuid: payload.userUuid });
+    checkNotFound(user, 'User not found');
     type RequestWithUser = Request & { user?: TokenPayload };
-    (req as RequestWithUser).user = decoded;
+    (req as RequestWithUser).user = payload;
     next();
-  } catch (err) {
-    console.error('[verifyHttpJWT] Token verification failed:', err);
-    return res.status(401).json({ message: 'Unauthorized: Invalid token' });
+  } catch (error) {
+    next(error);
   }
 }

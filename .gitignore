@@ -6,6 +6,7 @@
 /docs
 /asyncapi.json
 /package-lock.json
+/.env
 
 # Logs
 logs
