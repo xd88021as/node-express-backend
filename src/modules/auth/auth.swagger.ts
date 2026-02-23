@@ -76,7 +76,7 @@
  *   post:
  *     summary: 使用者登入
  *     tags: [Auth]
- *     security: []  # 不需要 JWT 驗證
+ *     security: []
  *     requestBody:
  *       required: true
  *       content:
@@ -98,7 +98,7 @@
  *   post:
  *     summary: 使用者註冊
  *     tags: [Auth]
- *     security: []  # 不需要 JWT 驗證
+ *     security: []
  *     requestBody:
  *       required: true
  *       content:

@@ -8,12 +8,6 @@
 /**
  * @swagger
  * components:
- *   securitySchemes:
- *     BearerAuth:
- *       type: http
- *       scheme: bearer
- *       bearerFormat: JWT
- *
  *   schemas:
  *     UserCreateDTO:
  *       type: object
@@ -225,7 +219,7 @@
  *
  *   get:
  *     tags: [User]
- *     summary: 查詢使用者列表，僅admin可用
+ *     summary: 查詢使用者列表（僅admin）
  *     parameters:
  *       - $ref: '#/components/parameters/Currency'
  *       - $ref: '#/components/parameters/StatusName'
@@ -270,7 +264,7 @@
  *
  *   patch:
  *     tags: [User]
- *     summary: 修改使用者資料
+ *     summary: 修改使用者資料（僅admin或本人）
  *     parameters:
  *       - in: path
  *         name: uuid
@@ -298,7 +292,7 @@
  * /account/{uuid}/password:
  *   patch:
  *     tags: [User]
- *     summary: 修改密碼（需本人或 admin）
+ *     summary: 修改密碼（僅admin或本人）
  *     parameters:
  *       - in: path
  *         name: uuid

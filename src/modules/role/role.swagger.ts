@@ -47,7 +47,7 @@
  * @swagger
  * /role:
  *   post:
- *     summary: 建立角色
+ *     summary: 建立角色（僅admin）
  *     tags: [Role]
  *     requestBody:
  *       required: true
@@ -66,6 +66,7 @@
  *   get:
  *     summary: 取得所有角色
  *     tags: [Role]
+ *     security: []
  *     responses:
  *       200:
  *         description: 成功回傳角色列表
@@ -77,7 +78,7 @@
  *                 $ref: '#/components/schemas/RoleResponseDTO'
  *
  *   patch:
- *     summary: 更新角色名稱
+ *     summary: 更新角色名稱（僅admin）
  *     tags: [Role]
  *     requestBody:
  *       required: true
