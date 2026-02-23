@@ -136,6 +136,17 @@
  *           type: string
  *           description: 角色名稱
  *
+ *     UserPaginationResponseDTO:
+ *       type: object
+ *       properties:
+ *         users:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/UserResponseDTO'
+ *         total:
+ *           type: integer
+ *           description: 總筆數
+ *
  *   parameters:
  *     Currency:
  *       in: query
@@ -238,7 +249,7 @@
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/UserResponseDTO'
+ *                 $ref: '#/components/schemas/UserPaginationResponseDTO'
  */
 
 /**
