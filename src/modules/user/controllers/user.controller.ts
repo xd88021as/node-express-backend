@@ -6,7 +6,7 @@ import {
   UserFindUniqueDTO,
   UserUpdateDTO,
 } from '../dtos/user-request.dto';
-import { UserResponseDTO } from '../dtos/user-response.dto';
+import { UserPaginationResponseDTO, UserResponseDTO } from '../dtos/user-response.dto';
 import { RoleService } from '@modules/role/services/role.service';
 import { verifyPassword } from '@utils/crypto.util';
 import { checkForbidden, checkNotFound } from '@utils/http-error.util';
@@ -32,11 +32,11 @@ export class UserController {
     return UserResponseDTO.generate(user);
   }
 
-  static async findMany(params: UserFindManyDTO): Promise<UserResponseDTO[]> {
+  static async findMany(params: UserFindManyDTO): Promise<UserPaginationResponseDTO> {
     const skip = params.page && params.limit ? (params.page - 1) * params.limit : undefined;
     const take = params.limit ?? undefined;
-    const users = await UserService.findMany({ ...params, skip, take });
-    return UserResponseDTO.generate(users);
+    const { users, total } = await UserService.findMany({ ...params, skip, take });
+    return UserPaginationResponseDTO.generate({ users, total });
   }
 
   static async update(params: UserUpdateDTO): Promise<UserResponseDTO> {

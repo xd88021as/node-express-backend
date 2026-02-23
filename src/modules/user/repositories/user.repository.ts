@@ -56,7 +56,8 @@ export class UserRepository {
     const orderBy = params.orderBy ?? 'id';
     const orderDirection = params.orderDirection ?? 'ASC';
     query.orderBy(`user.${orderBy}`, orderDirection);
-    return query.skip(params.skip).take(params.take).getMany();
+    const [data, total] = await query.skip(params.skip).take(params.take).getManyAndCount();
+    return { data, total };
   }
 
   static async update(id: number, params: UpdateParams) {
