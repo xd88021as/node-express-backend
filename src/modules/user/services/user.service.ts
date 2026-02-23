@@ -28,8 +28,8 @@ export class UserService {
   }
 
   static async findUnique(params: UserFindUniqueParams) {
-    const query = await UserRepository.findUnique(params);
-    return query;
+    const user = await UserRepository.findUnique(params);
+    return user;
   }
 
   static async findMany(params: UserFindManyParams) {
