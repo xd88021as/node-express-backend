@@ -121,14 +121,6 @@ export class UserUpdateDTO {
   @IsOptional()
   @IsString()
   language?: string;
-
-  @IsOptional()
-  @IsString()
-  statusName?: string;
-
-  @IsOptional()
-  @IsString()
-  roleName?: string;
 }
 
 export class UserChangePasswordDTO {
@@ -142,4 +134,24 @@ export class UserChangePasswordDTO {
   @IsString()
   @MinLength(1)
   newPassword!: string;
+}
+
+export class UserChangeRoleDTO {
+  @IsString()
+  uuid!: string;
+
+  @IsString()
+  roleName!: string;
+}
+
+export class UserChangeStatusDTO {
+  @IsString()
+  uuid!: string;
+
+  @IsString()
+  statusName!: string;
+
+  @IsOptional()
+  @IsString()
+  password?: string;
 }

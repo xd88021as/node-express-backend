@@ -8,12 +8,6 @@
 /**
  * @swagger
  * components:
- *   securitySchemes:
- *     BearerAuth:
- *       type: http
- *       scheme: bearer
- *       bearerFormat: JWT
- *
  *   schemas:
  *     UserCreateDTO:
  *       type: object
@@ -82,12 +76,6 @@
  *         language:
  *           type: string
  *           description: 語言（IETF language tag）
- *         statusName:
- *           type: string
- *           description: 狀態名稱（例如：active、banned）
- *         roleName:
- *           type: string
- *           description: 角色名稱（例如：user、admin、partner）
  *
  *     UserChangePasswordDTO:
  *       type: object
@@ -101,6 +89,27 @@
  *         newPassword:
  *           type: string
  *           description: 新密碼
+ *
+ *     UserChangeRoleDTO:
+ *       type: object
+ *       required:
+ *         - roleName
+ *       properties:
+ *         roleName:
+ *           type: string
+ *           description: 角色名稱（例如：user、admin、tester）
+ *
+ *     UserChangeStatusDTO:
+ *       type: object
+ *       required:
+ *         - statusName
+ *       properties:
+ *         statusName:
+ *           type: string
+ *           description: 狀態名稱（例如：active、banned）
+ *         password:
+ *           type: string
+ *           description: 使用者密碼
  *
  *     UserResponseDTO:
  *       type: object
@@ -141,6 +150,17 @@
  *         roleName:
  *           type: string
  *           description: 角色名稱
+ *
+ *     UserPaginationResponseDTO:
+ *       type: object
+ *       properties:
+ *         users:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/UserResponseDTO'
+ *         total:
+ *           type: integer
+ *           description: 總筆數
  *
  *   parameters:
  *     Currency:
@@ -208,7 +228,7 @@
  * /user:
  *   post:
  *     tags: [User]
- *     summary: 創建使用者，僅admin可用，常規創建流程走/auth/sign-up
+ *     summary: 創建使用者，常規創建流程走/auth/sign-up（僅admin）
  *     requestBody:
  *       required: true
  *       content:
@@ -225,7 +245,7 @@
  *
  *   get:
  *     tags: [User]
- *     summary: 查詢使用者列表，僅admin可用
+ *     summary: 查詢使用者列表（僅admin）
  *     parameters:
  *       - $ref: '#/components/parameters/Currency'
  *       - $ref: '#/components/parameters/StatusName'
@@ -244,7 +264,7 @@
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/UserResponseDTO'
+ *                 $ref: '#/components/schemas/UserPaginationResponseDTO'
  */
 
 /**
@@ -270,7 +290,7 @@
  *
  *   patch:
  *     tags: [User]
- *     summary: 修改使用者資料
+ *     summary: 修改使用者資料（僅admin或本人）
  *     parameters:
  *       - in: path
  *         name: uuid
@@ -295,10 +315,10 @@
 
 /**
  * @swagger
- * /account/{uuid}/password:
+ * /user/{uuid}/password:
  *   patch:
  *     tags: [User]
- *     summary: 修改密碼（需本人或 admin）
+ *     summary: 修改密碼（僅admin或本人）
  *     parameters:
  *       - in: path
  *         name: uuid
@@ -312,6 +332,62 @@
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/UserChangePasswordDTO'
+ *     responses:
+ *       200:
+ *         description: 修改成功
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UserResponseDTO'
+ */
+
+/**
+ * @swagger
+ * /user/{uuid}/role:
+ *   patch:
+ *     tags: [User]
+ *     summary: 修改角色（僅admin）
+ *     parameters:
+ *       - in: path
+ *         name: uuid
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: 使用者 UUID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserChangeRoleDTO'
+ *     responses:
+ *       200:
+ *         description: 修改成功
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UserResponseDTO'
+ */
+
+/**
+ * @swagger
+ * /user/{uuid}/status:
+ *   patch:
+ *     tags: [User]
+ *     summary: 修改使用者狀態（僅admin或本人）
+ *     parameters:
+ *       - in: path
+ *         name: uuid
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: 使用者 UUID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserChangeStatusDTO'
  *     responses:
  *       200:
  *         description: 修改成功

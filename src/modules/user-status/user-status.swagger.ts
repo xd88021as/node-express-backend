@@ -47,7 +47,7 @@
  * @swagger
  * /user-status:
  *   post:
- *     summary: 建立使用者狀態
+ *     summary: 建立使用者狀態（僅admin）
  *     tags: [UserStatus]
  *     requestBody:
  *       required: true
@@ -66,6 +66,7 @@
  *   get:
  *     summary: 取得所有使用者狀態
  *     tags: [UserStatus]
+ *     security: []
  *     responses:
  *       200:
  *         description: 成功回傳使用者狀態列表
@@ -77,7 +78,7 @@
  *                 $ref: '#/components/schemas/RoleResponseDTO'
  *
  *   patch:
- *     summary: 更新使用者狀態名稱
+ *     summary: 更新使用者狀態名稱（僅admin）
  *     tags: [UserStatus]
  *     requestBody:
  *       required: true
