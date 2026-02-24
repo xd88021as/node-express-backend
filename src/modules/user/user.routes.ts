@@ -3,6 +3,8 @@ import { authMiddleware, requireOwnershipOrRole } from 'middlewares/auth.middlew
 import { validateDTO } from 'middlewares/validate.middleware';
 import {
   UserChangePasswordDTO,
+  UserChangeRoleDTO,
+  UserChangeStatusDTO,
   UserCreateDTO,
   UserFindManyDTO,
   UserFindUniqueDTO,
@@ -63,6 +65,30 @@ router.patch(
   async (req, res) => {
     const dto = plainToInstance(UserChangePasswordDTO, { ...req.body, uuid: req.params.uuid });
     const response = await UserController.changePassword(dto);
+    return res.status(200).json(response);
+  }
+);
+
+router.patch(
+  '/:uuid/role',
+  authMiddleware,
+  requireOwnershipOrRole({ roles: ['admin'] }),
+  validateDTO(UserChangeRoleDTO),
+  async (req, res) => {
+    const dto = plainToInstance(UserChangeRoleDTO, { ...req.body, uuid: req.params.uuid });
+    const response = await UserController.changeRole(dto);
+    return res.status(200).json(response);
+  }
+);
+
+router.patch(
+  '/:uuid/status',
+  authMiddleware,
+  requireOwnershipOrRole({ roles: ['admin'], allowSelf: true }),
+  validateDTO(UserChangeStatusDTO),
+  async (req, res) => {
+    const dto = plainToInstance(UserChangeStatusDTO, { ...req.body, uuid: req.params.uuid });
+    const response = await UserController.changeStatus(dto);
     return res.status(200).json(response);
   }
 );
