@@ -28,8 +28,8 @@ export class UserService {
   }
 
   static async findUnique(params: UserFindUniqueParams) {
-    const query = await UserRepository.findUnique(params);
-    return query;
+    const user = await UserRepository.findUnique(params);
+    return user;
   }
 
   static async findMany(params: UserFindManyParams) {
@@ -44,8 +44,8 @@ export class UserService {
       orderBy: params.orderBy,
       orderDirection: params.orderDirection,
     };
-    const users = await UserRepository.findMany(searchParams);
-    return users;
+    const { data, total } = await UserRepository.findMany(searchParams);
+    return { users: data, total };
   }
 
   static async update(id: number, params: UserUpdateParams) {

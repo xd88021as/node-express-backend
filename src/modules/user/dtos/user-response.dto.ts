@@ -43,3 +43,19 @@ export class UserResponseDTO {
     }) as unknown as T extends unknown[] ? UserResponseDTO[] : UserResponseDTO;
   }
 }
+
+export class UserPaginationResponseDTO {
+  @Expose()
+  users!: UserResponseDTO[];
+
+  @Expose()
+  total!: number;
+
+  @Exclude()
+  static generate(data: { users: any[]; total: number }): UserPaginationResponseDTO {
+    return plainToInstance(UserPaginationResponseDTO, {
+      users: UserResponseDTO.generate(data.users),
+      total: data.total,
+    });
+  }
+}

@@ -1,8 +1,10 @@
 import { Router } from 'express';
-import { authMiddleware } from 'middlewares/auth.middleware';
+import { authMiddleware, requireOwnershipOrRole } from 'middlewares/auth.middleware';
 import { validateDTO } from 'middlewares/validate.middleware';
 import {
   UserChangePasswordDTO,
+  UserChangeRoleDTO,
+  UserChangeStatusDTO,
   UserCreateDTO,
   UserFindManyDTO,
   UserFindUniqueDTO,
@@ -10,57 +12,84 @@ import {
 } from './dtos/user-request.dto';
 import { UserController } from './controllers/user.controller';
 import { plainToInstance } from 'class-transformer';
-import { checkForbidden } from '@utils/http-error.util';
 
 const router = Router();
 
-router.post('', validateDTO(UserCreateDTO), async (req, res) => {
-  const dto = plainToInstance(UserCreateDTO, { ...req.body });
-  const resp = await UserController.create(dto);
-  res.status(200).json(resp);
-});
-
-router.get('', authMiddleware, validateDTO(UserFindManyDTO), async (req, res) => {
-  const dto = plainToInstance(UserFindManyDTO, req.query);
-  const resp = await UserController.findMany(dto);
-  res.status(200).json(resp);
-});
-
-router.get('/:uuid', validateDTO(UserFindUniqueDTO), async (req, res) => {
-  const dto = plainToInstance(UserFindUniqueDTO, { uuid: req.params.uuid });
-  const resp = await UserController.findUnique(dto);
-  res.status(200).json(resp);
-});
-
-router.patch('/:uuid', authMiddleware, validateDTO(UserUpdateDTO), async (req, res) => {
-  const user = (req as any).user;
-  const dto = plainToInstance(UserUpdateDTO, { ...req.body, uuid: req.params.uuid });
-
-  const isAdmin = user.role === 'admin';
-  const isNormal = user.userUuid === req.params.uuid;
-
-  if (!isAdmin && !isNormal) {
-    return res.json({ success: false, message: 'Unauthorized' });
+router.post(
+  '',
+  authMiddleware,
+  requireOwnershipOrRole({ roles: ['admin'] }),
+  validateDTO(UserCreateDTO),
+  async (req, res) => {
+    const dto = plainToInstance(UserCreateDTO, { ...req.body });
+    const response = await UserController.create(dto);
+    res.status(200).json(response);
   }
+);
 
-  const resp = await UserController.update(dto);
-  res.status(200).json(resp);
+router.get(
+  '',
+  authMiddleware,
+  requireOwnershipOrRole({ roles: ['admin'] }),
+  validateDTO(UserFindManyDTO),
+  async (req, res) => {
+    const dto = plainToInstance(UserFindManyDTO, req.query);
+    const response = await UserController.findMany(dto);
+    res.status(200).json(response);
+  }
+);
+
+router.get('/:uuid', authMiddleware, validateDTO(UserFindUniqueDTO), async (req, res) => {
+  const dto = plainToInstance(UserFindUniqueDTO, { uuid: req.params.uuid });
+  const response = await UserController.findUnique(dto);
+  res.status(200).json(response);
 });
+
+router.patch(
+  '/:uuid',
+  authMiddleware,
+  requireOwnershipOrRole({ roles: ['admin'], allowSelf: true }),
+  validateDTO(UserUpdateDTO),
+  async (req, res) => {
+    const dto = plainToInstance(UserUpdateDTO, { ...req.body, uuid: req.params.uuid });
+    const response = await UserController.update(dto);
+    res.status(200).json(response);
+  }
+);
 
 router.patch(
   '/:uuid/password',
   authMiddleware,
+  requireOwnershipOrRole({ roles: ['admin'], allowSelf: true }),
   validateDTO(UserChangePasswordDTO),
   async (req, res) => {
-    const user = (req as any).user;
     const dto = plainToInstance(UserChangePasswordDTO, { ...req.body, uuid: req.params.uuid });
+    const response = await UserController.changePassword(dto);
+    return res.status(200).json(response);
+  }
+);
 
-    const isAdmin = user.role === 'admin';
-    const isSelf = user.userUuid === req.params.uuid;
-    checkForbidden(isAdmin || isSelf);
+router.patch(
+  '/:uuid/role',
+  authMiddleware,
+  requireOwnershipOrRole({ roles: ['admin'] }),
+  validateDTO(UserChangeRoleDTO),
+  async (req, res) => {
+    const dto = plainToInstance(UserChangeRoleDTO, { ...req.body, uuid: req.params.uuid });
+    const response = await UserController.changeRole(dto);
+    return res.status(200).json(response);
+  }
+);
 
-    const resp = await UserController.changePassword(dto);
-    return res.status(200).json(resp);
+router.patch(
+  '/:uuid/status',
+  authMiddleware,
+  requireOwnershipOrRole({ roles: ['admin'], allowSelf: true }),
+  validateDTO(UserChangeStatusDTO),
+  async (req, res) => {
+    const dto = plainToInstance(UserChangeStatusDTO, { ...req.body, uuid: req.params.uuid });
+    const response = await UserController.changeStatus(dto);
+    return res.status(200).json(response);
   }
 );
 
