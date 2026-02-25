@@ -1,30 +1,21 @@
-import jwt from 'jwt-simple';
+import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken';
 import { ENV } from '@config/env';
 import { checkUnauthorized } from './http-error.util';
 
-export interface TokenPayload {
+export interface TokenPayload extends JwtPayload {
   userUuid: string;
   roleName: string;
-  iat?: number;
-  exp?: number;
 }
 
-export function signJwt(payload: TokenPayload, expiresIn?: number): string {
-  const timestamp = Math.floor(Date.now() / 1000);
-  const tokenPayload: TokenPayload = {
-    ...payload,
-    iat: timestamp,
-    ...(expiresIn ? { exp: timestamp + expiresIn } : {}),
-  };
-  return jwt.encode(tokenPayload, String(ENV.JWT_SECRET));
+export function signJwt(payload: TokenPayload, expiresIn: SignOptions['expiresIn'] = '1h'): string {
+  return jwt.sign(payload, ENV.JWT_SECRET, { expiresIn });
 }
 
 export function verifyJwt(token: string): TokenPayload {
-  const decoded = jwt.decode(token, ENV.JWT_SECRET) as TokenPayload;
-  checkUnauthorized(decoded?.userUuid, 'Invalid token');
-  const now = Math.floor(Date.now() / 1000);
-  if (decoded.exp && decoded.exp < now) {
-    throw new Error('JWT expired');
+  try {
+    return jwt.verify(token, ENV.JWT_SECRET) as TokenPayload & JwtPayload;
+  } catch (err) {
+    console.error('[JwtUtil.verify] Token verification failed:', err);
+    checkUnauthorized(false, 'Invalid token');
   }
-  return decoded;
 }
