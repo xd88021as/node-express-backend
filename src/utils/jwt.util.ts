@@ -7,7 +7,7 @@ export interface TokenPayload extends JwtPayload {
   roleName: string;
 }
 
-export function signJwt(payload: TokenPayload, expiresIn: SignOptions['expiresIn'] = '1h'): string {
+export function signJwt(payload: TokenPayload, expiresIn: SignOptions['expiresIn']): string {
   return jwt.sign(payload, ENV.JWT_SECRET, { expiresIn });
 }
 

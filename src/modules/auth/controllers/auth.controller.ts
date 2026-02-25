@@ -4,7 +4,6 @@ import { AuthSignInDTO, AuthSignUpDTO } from '../dtos/auth-request.dto';
 import { AuthResponseDTO } from '../dtos/auth-response.dto';
 import { checkForbidden, checkNotFound } from '@utils/http-error.util';
 import { verifyPassword } from '@utils/crypto.util';
-import { signJwt } from '@utils/jwt.util';
 import { UserStatusService } from '@modules/user-status/services/user-status.service';
 import { AuthService } from '../services/auth.service';
 
@@ -14,10 +13,7 @@ export class AuthController {
     checkNotFound(user, 'User not found');
     const verify = verifyPassword(params.password, user.password);
     checkForbidden(verify, 'Wrong password');
-    const oldToken = await AuthService.getTokenFromRedis(user.uuid);
-    console.log(`oldToken: ${oldToken}`);
-    const token = signJwt({ userUuid: user.uuid, roleName: user.role.name });
-    await AuthService.setTokenToRedis(user.uuid, token);
+    const token = await AuthService.issueToken({ userUuid: user.uuid, roleName: user.role.name });
     return AuthResponseDTO.generate({
       userUuid: user.uuid,
       balance: user.balance,
@@ -40,7 +36,7 @@ export class AuthController {
       statusId: status.id,
       roleId: role.id,
     });
-    const token = signJwt({ userUuid: user!.uuid, roleName: user!.role.name });
+    const token = await AuthService.issueToken({ userUuid: user!.uuid, roleName: user!.role.name });
     return AuthResponseDTO.generate({
       userUuid: user!.uuid,
       balance: user!.balance,
@@ -48,5 +44,10 @@ export class AuthController {
       language: user!.language,
       token,
     });
+  }
+
+  static async signOut(userUuid: string): Promise<{ message: string }> {
+    await AuthService.removeTokenToRedis(userUuid);
+    return { message: 'Sign out success' };
   }
 }

@@ -113,3 +113,22 @@
  *             schema:
  *               $ref: '#/components/schemas/AuthResponseDTO'
  */
+
+/**
+ * @swagger
+ * /auth/sign-out:
+ *   post:
+ *     summary: 使用者登出
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: 登出成功
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Sign out success
+ */

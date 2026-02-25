@@ -23,8 +23,8 @@ export class UserService {
       status: { id: params.statusId },
       role: { id: params.roleId },
     };
-    const result = await UserRepository.create(createParams);
-    return result;
+    const user = await UserRepository.create(createParams);
+    return user;
   }
 
   static async findUnique(params: UserFindUniqueParams) {
@@ -60,7 +60,7 @@ export class UserService {
       ...(params.statusId ? { status: { id: params.statusId } } : {}),
       ...(params.roleId ? { role: { id: params.roleId } } : {}),
     };
-    const result = await UserRepository.update(id, updateParams);
-    return result;
+    const user = await UserRepository.update(id, updateParams);
+    return user;
   }
 }

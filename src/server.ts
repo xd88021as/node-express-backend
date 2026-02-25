@@ -13,7 +13,11 @@ async function startServer() {
   const app = express();
   const PORT = ENV.PORT;
 
-  app.use(cors());
+  app.use(
+    cors({
+      exposedHeaders: ['Authorization', 'X-Access-Token'],
+    })
+  );
   app.use(express.json());
 
   app.get('/livez', (req, res) => {
