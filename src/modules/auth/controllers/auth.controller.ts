@@ -14,6 +14,8 @@ export class AuthController {
     checkNotFound(user, 'User not found');
     const verify = verifyPassword(params.password, user.password);
     checkForbidden(verify, 'Wrong password');
+    const oldToken = await AuthService.getTokenFromRedis(user.uuid);
+    console.log(`oldToken: ${oldToken}`);
     const token = signJwt({ userUuid: user.uuid, roleName: user.role.name });
     await AuthService.setTokenToRedis(user.uuid, token);
     return AuthResponseDTO.generate({

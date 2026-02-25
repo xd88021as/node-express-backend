@@ -5,8 +5,7 @@ const getTokenKey = (userUuid: string) => `user:${userUuid}:token`;
 export class AuthRedis {
   static async setToken(userUuid: string, token: string, ttlSeconds = 15 * 60) {
     const key = getTokenKey(userUuid);
-    console.log(`redis key: ${key}, valud: ${token}`);
-    await redis.set(key, token, 'EX', ttlSeconds);
+    await redis.set(key, token, { ex: ttlSeconds });
   }
 
   static async getToken(userUuid: string) {
