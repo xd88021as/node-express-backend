@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "docker-init": "docker-compose -p test-docker -f docker-compose.yaml up -d --no-recreate",
     "dev": "nodemon --watch src --exec ts-node -r tsconfig-paths/register src/server.ts",
     "build": "tsc && tsc-alias",
     "start": "node dist/server.js",
@@ -30,6 +31,7 @@
     "http-errors": "^2.0.0",
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.16.0",
+    "redis": "^5.11.0",
     "reflect-metadata": "^0.2.2",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",

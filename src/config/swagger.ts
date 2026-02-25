@@ -4,7 +4,6 @@ import { Express } from 'express';
 import { ENV } from '@config/env';
 
 const isDev = ENV.ENVIRONMENT === 'dev';
-const localServerUrl = `http://localhost:${ENV.PORT}`;
 
 const options: swaggerJSDoc.Options = {
   definition: {
@@ -24,12 +23,6 @@ const options: swaggerJSDoc.Options = {
 - 新 Token 會回傳在 response headers：\`Authorization\` 與 \`X-Access-Token\`
       `,
     },
-    servers: [
-      {
-        url: localServerUrl,
-        description: 'Local development server',
-      },
-    ],
     components: {
       securitySchemes: {
         bearerAuth: {
@@ -58,7 +51,7 @@ export function setupSwagger(app: Express) {
     swaggerUi.serve,
     swaggerUi.setup(swaggerSpec, {
       explorer: true,
-      customSiteTitle: `${ENV.PROJECT_NAME} API Docs`,
+      customSiteTitle: `wes-side-project API Docs`,
     })
   );
 }
