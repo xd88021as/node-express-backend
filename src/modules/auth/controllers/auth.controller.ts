@@ -6,6 +6,7 @@ import { checkForbidden, checkNotFound } from '@utils/http-error.util';
 import { verifyPassword } from '@utils/crypto.util';
 import { signJwt } from '@utils/jwt.util';
 import { UserStatusService } from '@modules/user-status/services/user-status.service';
+import { AuthService } from '../services/auth.service';
 
 export class AuthController {
   static async signIn(params: AuthSignInDTO): Promise<AuthResponseDTO> {
@@ -14,6 +15,7 @@ export class AuthController {
     const verify = verifyPassword(params.password, user.password);
     checkForbidden(verify, 'Wrong password');
     const token = signJwt({ userUuid: user.uuid, roleName: user.role.name });
+    await AuthService.setTokenToRedis(user.uuid, token);
     return AuthResponseDTO.generate({
       userUuid: user.uuid,
       balance: user.balance,

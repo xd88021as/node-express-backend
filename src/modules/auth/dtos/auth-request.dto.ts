@@ -27,3 +27,8 @@ export class AuthSignUpDTO {
   @IsString()
   language?: string;
 }
+
+export class AuthSignOutDTO {
+  @IsString()
+  uuid!: string;
+}
