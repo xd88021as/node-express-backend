@@ -16,7 +16,7 @@
  *       properties:
  *         plaintext:
  *           type: string
- *           description: 加密明文
+ *           description: 明文
  *
  *     ToolCryptoResponseDTO:
  *       type: object
@@ -32,6 +32,7 @@
  *   post:
  *     summary: 加密明文
  *     tags: [Tool]
+ *     security: []
  *     requestBody:
  *       required: true
  *       content:
