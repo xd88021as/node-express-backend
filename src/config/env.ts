@@ -14,4 +14,6 @@ export const ENV = {
   REDIS_TOKEN: process.env.REDIS_TOKEN || '',
   PROJECT_NAME: process.env.PROJECT_NAME || 'finding-lost-magic',
   ENVIRONMENT: process.env.ENVIRONMENT || 'stg',
+  AES_256_CBC_KEY_HEX: process.env.AES_256_CBC_KEY_HEX || '',
+  AES_256_CBC_IV_UTF8: process.env.AES_256_CBC_IV_UTF8 || '',
 };
