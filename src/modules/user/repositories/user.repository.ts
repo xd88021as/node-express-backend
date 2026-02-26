@@ -10,7 +10,7 @@ import {
 const repo = AppDataSource.getRepository(UserEntity);
 
 export class UserRepository {
-  static createQueryBuilderWithStatus() {
+  static createQueryBuilder() {
     return repo
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.status', 'status')
@@ -21,14 +21,14 @@ export class UserRepository {
   static async create(params: CreateParams) {
     const entity = repo.create(params);
     const savedEntity = await repo.save(entity);
-    return this.createQueryBuilderWithStatus()
-      .where('user.uuid = :uuid', { uuid: savedEntity.uuid })
-      .getOne();
+    return this.createQueryBuilder().where('user.id = :id', { id: savedEntity.id }).getOne();
   }
 
   static async findUnique(params: FindUniqueParams) {
-    const query = this.createQueryBuilderWithStatus();
-    if (params.uuid) {
+    const query = this.createQueryBuilder();
+    if (params.id) {
+      query.where('user.id = :id', { id: params.id });
+    } else if (params.uuid) {
       query.where('user.uuid = :uuid', { uuid: params.uuid });
     } else if (params.account) {
       query.where('user.account = :account', { account: params.account });
@@ -37,7 +37,7 @@ export class UserRepository {
   }
 
   static async findMany(params: FindManyParams) {
-    const query = this.createQueryBuilderWithStatus();
+    const query = this.createQueryBuilder();
     if (params.currency) {
       query.andWhere('user.currency = :currency', { currency: params.currency });
     }
@@ -62,6 +62,6 @@ export class UserRepository {
 
   static async update(id: number, params: UpdateParams) {
     await repo.createQueryBuilder().update().set(params).where('id = :id', { id }).execute();
-    return this.createQueryBuilderWithStatus().where('user.id = :id', { id }).getOne();
+    return this.createQueryBuilder().where('user.id = :id', { id }).getOne();
   }
 }

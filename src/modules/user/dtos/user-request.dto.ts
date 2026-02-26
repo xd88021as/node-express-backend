@@ -51,13 +51,8 @@ export class UserCreateDTO {
 }
 
 export class UserFindUniqueDTO {
-  @IsOptional()
   @IsUUID()
-  uuid?: string;
-
-  @IsOptional()
-  @IsString()
-  account?: string;
+  uuid!: string;
 }
 
 export class UserFindManyDTO {

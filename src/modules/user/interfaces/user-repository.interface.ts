@@ -14,6 +14,7 @@ export interface CreateParams {
 }
 
 export interface FindUniqueParams {
+  id?: number;
   uuid?: string;
   account?: string;
 }
