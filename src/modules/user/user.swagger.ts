@@ -220,6 +220,7 @@
  *       name: orderDirection
  *       schema:
  *         type: string
+ *         enum: [ASC, DESC]
  *       description: 排序方式ASC/DESC（預設 ASC）
  */
 

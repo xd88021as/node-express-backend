@@ -29,10 +29,6 @@ export class ShopFindUniqueDTO {
 
 export class ShopFindManyDTO {
   @IsOptional()
-  @IsInt()
-  userId?: number;
-
-  @IsOptional()
   @IsString()
   userUuid?: string;
 

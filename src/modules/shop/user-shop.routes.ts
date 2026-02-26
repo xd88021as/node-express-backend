@@ -5,7 +5,7 @@ import { authMiddleware, requireOwnershipOrRole } from '@middlewares/auth.middle
 import { ShopController } from './controllers/shop.controller';
 import { ShopCreateDTO, ShopUpdateDTO } from './dtos/shop-request.dto';
 
-const router = Router();
+const router = Router({ mergeParams: true });
 
 router.post(
   '',
