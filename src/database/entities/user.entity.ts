@@ -6,9 +6,11 @@ import {
   Index,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { UserStatusEntity } from './user-status.entity';
 import { RoleEntity } from './role.entity';
+import { ShopEntity } from './shop.entity';
 
 @Entity('user')
 export class UserEntity {
@@ -53,4 +55,7 @@ export class UserEntity {
   @ManyToOne(() => RoleEntity, { nullable: true, eager: true })
   @JoinColumn({ name: 'role_id' })
   role!: RoleEntity;
+
+  @OneToMany(() => ShopEntity, (shop) => shop.user)
+  shops!: ShopEntity[];
 }

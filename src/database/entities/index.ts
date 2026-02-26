@@ -1,5 +1,6 @@
 import { RoleEntity } from './role.entity';
+import { ShopEntity } from './shop.entity';
 import { UserStatusEntity } from './user-status.entity';
 import { UserEntity } from './user.entity';
 
-export const entities = [RoleEntity, UserStatusEntity, UserEntity];
+export const entities = [RoleEntity, UserStatusEntity, UserEntity, ShopEntity];
