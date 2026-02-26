@@ -21,6 +21,12 @@ const options: swaggerJSDoc.Options = {
 - Token 有效期為 15 分鐘
 - 當 Token 接近過期時（目前門檻：2 分鐘），呼叫需要授權的 API 會自動簽發新 Token，舊的 Token 將失效
 - 新 Token 會回傳在 response headers：\`Authorization\` 與 \`X-Access-Token\`
+
+## 所有測試帳號
+- 管理者帳號：admin01
+- 測試者帳號：tester01、tester02、tester03、tester04、tester05
+- 使用者帳號：user01、user02、user03、user04、user05
+- 密碼均為123，測試過程如有修改以上測試帳號密碼，請再更正回來
       `,
     },
     components: {
