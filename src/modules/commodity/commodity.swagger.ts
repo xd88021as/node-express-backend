@@ -13,6 +13,8 @@
  *       type: object
  *       required:
  *         - name
+ *         - currency
+ *         - price
  *       properties:
  *         name:
  *           type: string
@@ -169,13 +171,14 @@
 
 /**
  * @swagger
- * /commodity/{uuid}:
+ * /commodity/{commodityUuid}:
  *   get:
  *     summary: 查詢單一商品
  *     tags: [Commodity]
+ *     security: []
  *     parameters:
  *       - in: path
- *         name: uuid
+ *         name: commodityUuid
  *         required: true
  *         schema:
  *           type: string
@@ -191,13 +194,19 @@
 
 /**
  * @swagger
- * /shop/{uuid}/commodity:
+ * /user/{userUuid}/shop/{shopUuid}/commodity:
  *   post:
  *     summary: 在指定商店建立商品
  *     tags: [Commodity]
  *     parameters:
  *       - in: path
- *         name: uuid
+ *         name: userUuid
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: 使用者 UUID
+ *       - in: path
+ *         name: shopUuid
  *         required: true
  *         schema:
  *           type: string
@@ -219,13 +228,19 @@
 
 /**
  * @swagger
- * /shop/{uuid}/commodity/{commodityUuid}:
+ * /user/{userUuid}/shop/{shopUuid}/commodity/{commodityUuid}:
  *   patch:
  *     summary: 更新指定商店的商品
  *     tags: [Commodity]
  *     parameters:
  *       - in: path
- *         name: uuid
+ *         name: userUuid
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: 使用者 UUID
+ *       - in: path
+ *         name: shopUuid
  *         required: true
  *         schema:
  *           type: string

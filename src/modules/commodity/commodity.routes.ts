@@ -12,8 +12,8 @@ router.get('', validateDTO(CommodityFindManyDTO), async (req, res) => {
   res.status(200).json(response);
 });
 
-router.get('/:commodirtUuid', validateDTO(CommodityFindUniqueDTO), async (req, res) => {
-  const dto = plainToInstance(CommodityFindUniqueDTO, { commodirtUuid: req.params.commodirtUuid });
+router.get('/:commodityUuid', validateDTO(CommodityFindUniqueDTO), async (req, res) => {
+  const dto = plainToInstance(CommodityFindUniqueDTO, { commodityUuid: req.params.commodityUuid });
   const response = await CommodityController.findUnique(dto);
   res.status(200).json(response);
 });

@@ -87,7 +87,7 @@
  *   parameters:
  *     UserUuid:
  *       in: query
- *       name: userId
+ *       name: userUuid
  *       schema:
  *         type: string
  *       description: 使用者 UUID
@@ -189,13 +189,13 @@
 
 /**
  * @swagger
- * /user/{shopUuid}/shop:
+ * /user/{userUuid}/shop:
  *   post:
  *     summary: 建立指定使用者的商店
  *     tags: [Shop]
  *     parameters:
  *       - in: path
- *         name: shopUuid
+ *         name: userUuid
  *         required: true
  *         schema:
  *           type: string
@@ -217,13 +217,13 @@
 
 /**
  * @swagger
- * /user/{shopUuid}/shop/{shopUuid}:
+ * /user/{userUuid}/shop/{shopUuid}:
  *   patch:
  *     summary: 更新指定使用者的商店
  *     tags: [Shop]
  *     parameters:
  *       - in: path
- *         name: shopUuid
+ *         name: userUuid
  *         required: true
  *         schema:
  *           type: string

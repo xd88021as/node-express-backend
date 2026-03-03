@@ -50,18 +50,15 @@
  *     AuthResponseDTO:
  *       type: object
  *       properties:
- *         playerUuid:
+ *         userUUid:
  *           type: string
- *           description: 玩家 UUID
+ *           description: 使用者 UUID
  *         balance:
  *           type: string
  *           description: 餘額，使用string避免浮點誤差
  *         currency:
  *           type: string
  *           description: 幣別
- *         exchangeRate:
- *           type: string
- *           description: 匯率，使用string避免浮點誤差
  *         language:
  *           type: string
  *           description: 語言（IETF language tag）
