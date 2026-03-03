@@ -1,116 +1,117 @@
 /**
  * @swagger
  * tags:
- *   - name: Shop
- *     description: 商店管理
+ *   - name: Commodity
+ *     description: 商品管理
  */
 
 /**
  * @swagger
  * components:
  *   schemas:
- *     ShopCreateDTO:
+ *     CommodityCreateDTO:
  *       type: object
  *       required:
  *         - name
  *       properties:
  *         name:
  *           type: string
- *           description: 商店名稱
- *         localPhoneNumber:
- *           type: string
- *           description: 市話
- *         mobilePhoneNumber:
- *           type: string
- *           description: 手機
+ *           description: 商品名稱
  *         introduction:
  *           type: string
- *           description: 商店介紹
+ *           description: 商品介紹
+ *         currency:
+ *           type: string
+ *           description: 幣別
+ *           default: TWD
+ *         price:
+ *           type: string
+ *           description: 價格
  *
- *     ShopUpdateDTO:
+ *     CommodityUpdateDTO:
  *       type: object
  *       properties:
  *         name:
  *           type: string
- *           description: 商店名稱
- *         localPhoneNumber:
- *           type: string
- *           description: 市話
- *         mobilePhoneNumber:
- *           type: string
- *           description: 手機
+ *           description: 商品名稱
  *         introduction:
  *           type: string
- *           description: 商店介紹
+ *           description: 商品介紹
+ *         currency:
+ *           type: string
+ *           description: 幣別
+ *         price:
+ *           type: string
+ *           description: 價格
  *
- *     ShopResponseDTO:
+ *     CommodityResponseDTO:
  *       type: object
  *       properties:
  *         uuid:
  *           type: string
- *           description: 商店 UUID
- *         userUuid:
+ *         shopUuid:
  *           type: string
- *           description: 使用者 UUID
+ *         shopName:
+ *           type: string
  *         name:
  *           type: string
- *           description: 商店名稱
- *         localPhoneNumber:
- *           type: string
- *           description: 市話
- *         mobilePhoneNumber:
- *           type: string
- *           description: 手機
  *         introduction:
  *           type: string
- *           description: 商店介紹
+ *         currency:
+ *           type: string
+ *         price:
+ *           type: string
  *         createdAt:
  *           type: string
  *           format: date-time
- *           description: 創建時間
  *         updatedAt:
  *           type: string
  *           format: date-time
- *           description: 最後更改時間
  *
- *     ShopPaginationResponseDTO:
+ *     CommodityPaginationResponseDTO:
  *       type: object
  *       properties:
- *         shops:
+ *         commodities:
  *           type: array
  *           items:
- *             $ref: '#/components/schemas/ShopResponseDTO'
+ *             $ref: '#/components/schemas/CommodityResponseDTO'
  *         total:
  *           type: integer
  *           description: 總筆數
  *
  *   parameters:
- *     UserUuid:
+ *     ShopUuid:
  *       in: query
- *       name: userId
+ *       name: shopUuid
  *       schema:
  *         type: string
- *       description: 使用者 UUID
- *     UserAccount:
+ *       description: 商店 UUID
+ *     ShopName:
  *       in: query
- *       name: userAccount
+ *       name: shopName
  *       schema:
  *         type: string
- *       description: 使用者帳號
+ *       description: 商店名稱
+ *     Currency:
+ *       in: query
+ *       name: currency
+ *       schema:
+ *         type: string
+ *       description: 幣別
  *     CreatedFrom:
  *       in: query
  *       name: createdFrom
  *       schema:
  *         type: string
  *         format: date-time
- *       description: 註冊起始時間
+ *       description: 建立起始時間
  *     CreatedTo:
  *       in: query
  *       name: createdTo
  *       schema:
  *         type: string
  *         format: date-time
- *       description: 註冊結束時間
+ *       description: 建立結束時間
  *     Page:
  *       in: query
  *       name: page
@@ -137,19 +138,20 @@
  *       schema:
  *         type: string
  *         enum: [ASC, DESC]
- *       description: 排序方式ASC/DESC（預設 ASC）
+ *       description: 排序方式 ASC/DESC（預設 ASC）
  */
 
 /**
  * @swagger
- * /shop:
+ * /commodity:
  *   get:
- *     summary: 查詢商店列表
- *     tags: [Shop]
+ *     summary: 查詢商品列表
+ *     tags: [Commodity]
  *     security: []
  *     parameters:
- *       - $ref: '#/components/parameters/UserUuid'
- *       - $ref: '#/components/parameters/UserAccount'
+ *       - $ref: '#/components/parameters/ShopUuid'
+ *       - $ref: '#/components/parameters/ShopName'
+ *       - $ref: '#/components/parameters/Currency'
  *       - $ref: '#/components/parameters/CreatedFrom'
  *       - $ref: '#/components/parameters/CreatedTo'
  *       - $ref: '#/components/parameters/Page'
@@ -162,89 +164,89 @@
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ShopPaginationResponseDTO'
+ *               $ref: '#/components/schemas/CommodityPaginationResponseDTO'
  */
 
 /**
  * @swagger
- * /shop/{shopUuid}:
+ * /commodity/{uuid}:
  *   get:
- *     summary: 查詢單一商店
- *     tags: [Shop]
+ *     summary: 查詢單一商品
+ *     tags: [Commodity]
  *     parameters:
  *       - in: path
- *         name: shopUuid
+ *         name: uuid
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: 商品 UUID
+ *     responses:
+ *       200:
+ *         description: 回傳商品資料
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/CommodityResponseDTO'
+ */
+
+/**
+ * @swagger
+ * /shop/{uuid}/commodity:
+ *   post:
+ *     summary: 在指定商店建立商品
+ *     tags: [Commodity]
+ *     parameters:
+ *       - in: path
+ *         name: uuid
  *         required: true
  *         schema:
  *           type: string
  *         description: 商店 UUID
- *     responses:
- *       200:
- *         description: 回傳商店資料
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ShopResponseDTO'
- */
-
-/**
- * @swagger
- * /user/{shopUuid}/shop:
- *   post:
- *     summary: 建立指定使用者的商店
- *     tags: [Shop]
- *     parameters:
- *       - in: path
- *         name: shopUuid
- *         required: true
- *         schema:
- *           type: string
- *         description: 使用者 UUID
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/ShopCreateDTO'
+ *             $ref: '#/components/schemas/CommodityCreateDTO'
  *     responses:
  *       200:
  *         description: 建立成功
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ShopResponseDTO'
+ *               $ref: '#/components/schemas/CommodityResponseDTO'
  */
 
 /**
  * @swagger
- * /user/{shopUuid}/shop/{shopUuid}:
+ * /shop/{uuid}/commodity/{commodityUuid}:
  *   patch:
- *     summary: 更新指定使用者的商店
- *     tags: [Shop]
+ *     summary: 更新指定商店的商品
+ *     tags: [Commodity]
  *     parameters:
  *       - in: path
- *         name: shopUuid
- *         required: true
- *         schema:
- *           type: string
- *         description: 使用者 UUID
- *       - in: path
- *         name: shopUuid
+ *         name: uuid
  *         required: true
  *         schema:
  *           type: string
  *         description: 商店 UUID
+ *       - in: path
+ *         name: commodityUuid
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: 商品 UUID
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/ShopUpdateDTO'
+ *             $ref: '#/components/schemas/CommodityUpdateDTO'
  *     responses:
  *       200:
  *         description: 更新成功
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ShopResponseDTO'
+ *               $ref: '#/components/schemas/CommodityResponseDTO'
  */

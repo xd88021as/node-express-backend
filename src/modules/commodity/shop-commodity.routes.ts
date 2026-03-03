@@ -2,8 +2,8 @@ import { Router } from 'express';
 import { plainToInstance } from 'class-transformer';
 import { validateDTO } from '@middlewares/validate.middleware';
 import { authMiddleware, requireOwnershipOrRole } from '@middlewares/auth.middleware';
-import { ShopController } from './controllers/shop.controller';
-import { ShopCreateDTO, ShopUpdateDTO } from './dtos/shop-request.dto';
+import { CommodityController } from './controllers/commodity.controller';
+import { CommodityCreateDTO, CommodityUpdateDTO } from './dtos/commodity-request.dto';
 
 const router = Router({ mergeParams: true });
 
@@ -11,25 +11,25 @@ router.post(
   '',
   authMiddleware,
   requireOwnershipOrRole({ roles: ['admin'], allowSelf: true }),
-  validateDTO(ShopCreateDTO),
+  validateDTO(CommodityCreateDTO),
   async (req, res) => {
-    const dto = plainToInstance(ShopCreateDTO, { ...req.body, userUuid: req.params.userUuid });
-    const response = await ShopController.create(dto);
+    const dto = plainToInstance(CommodityCreateDTO, { ...req.body, shopUuid: req.params.shopUuid });
+    const response = await CommodityController.create(dto);
     res.status(200).json(response);
   }
 );
 
 router.patch(
-  '/:shopUuid',
+  '/:commodityUuid',
   authMiddleware,
   requireOwnershipOrRole({ roles: ['admin'], allowSelf: true }),
-  validateDTO(ShopUpdateDTO),
+  validateDTO(CommodityUpdateDTO),
   async (req, res) => {
-    const dto = plainToInstance(ShopUpdateDTO, {
+    const dto = plainToInstance(CommodityUpdateDTO, {
       ...req.body,
-      shopUuid: req.params.shopUuid,
+      commodityUuid: req.params.commodityUuid,
     });
-    const response = await ShopController.update(dto);
+    const response = await CommodityController.update(dto);
     res.status(200).json(response);
   }
 );

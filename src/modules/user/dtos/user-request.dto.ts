@@ -52,7 +52,7 @@ export class UserCreateDTO {
 
 export class UserFindUniqueDTO {
   @IsUUID()
-  uuid!: string;
+  userUuid!: string;
 }
 
 export class UserFindManyDTO {
@@ -99,7 +99,7 @@ export class UserFindManyDTO {
 
 export class UserUpdateDTO {
   @IsUUID()
-  uuid!: string;
+  userUuid!: string;
 
   @IsOptional()
   @IsString()
@@ -120,7 +120,7 @@ export class UserUpdateDTO {
 
 export class UserChangePasswordDTO {
   @IsString()
-  uuid!: string;
+  userUuid!: string;
 
   @IsString()
   @MinLength(1)
@@ -133,7 +133,7 @@ export class UserChangePasswordDTO {
 
 export class UserChangeRoleDTO {
   @IsString()
-  uuid!: string;
+  userUuid!: string;
 
   @IsString()
   roleName!: string;
@@ -141,7 +141,7 @@ export class UserChangeRoleDTO {
 
 export class UserChangeStatusDTO {
   @IsString()
-  uuid!: string;
+  userUuid!: string;
 
   @IsString()
   statusName!: string;

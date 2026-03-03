@@ -12,8 +12,8 @@ router.get('', validateDTO(ShopFindManyDTO), async (req, res) => {
   res.status(200).json(response);
 });
 
-router.get('/:uuid', validateDTO(ShopFindUniqueDTO), async (req, res) => {
-  const dto = plainToInstance(ShopFindUniqueDTO, { uuid: req.params.uuid });
+router.get('/:shopUuid', validateDTO(ShopFindUniqueDTO), async (req, res) => {
+  const dto = plainToInstance(ShopFindUniqueDTO, { shopUuid: req.params.shopUuid });
   const response = await ShopController.findUnique(dto);
   res.status(200).json(response);
 });

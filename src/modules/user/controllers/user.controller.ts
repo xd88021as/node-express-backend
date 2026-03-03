@@ -29,7 +29,7 @@ export class UserController {
   }
 
   static async findUnique(params: UserFindUniqueDTO): Promise<UserResponseDTO> {
-    const user = await UserService.findUnique(params);
+    const user = await UserService.findUnique({ uuid: params.userUuid });
     checkNotFound(user, 'User not found');
     return UserResponseDTO.generate(user);
   }
@@ -42,25 +42,24 @@ export class UserController {
   }
 
   static async update(params: UserUpdateDTO): Promise<UserResponseDTO> {
-    const user = await UserService.findUnique({ uuid: params.uuid });
+    const user = await UserService.findUnique({ uuid: params.userUuid });
     checkNotFound(user, 'User not found');
     const newUser = await UserService.update(user.id, { ...params });
     return UserResponseDTO.generate(newUser);
   }
 
   static async changePassword(params: UserChangePasswordDTO): Promise<UserResponseDTO> {
-    const { uuid, oldPassword, newPassword } = params;
-    const user = await UserService.findUnique({ uuid });
+    const user = await UserService.findUnique({ uuid: params.userUuid });
     checkNotFound(user, 'User not found');
-    const verify = verifyPassword(oldPassword, user.password);
+    const verify = verifyPassword(params.oldPassword, user.password);
     checkForbidden(verify, 'Wrong password');
 
-    const updatedUser = await UserService.update(user.id, { password: newPassword });
+    const updatedUser = await UserService.update(user.id, { password: params.newPassword });
     return UserResponseDTO.generate(updatedUser);
   }
 
   static async changeRole(params: UserChangeRoleDTO): Promise<UserResponseDTO> {
-    const user = await UserService.findUnique({ uuid: params.uuid });
+    const user = await UserService.findUnique({ uuid: params.userUuid });
     checkNotFound(user, 'User not found');
     const role = await RoleService.findUnique(params.roleName);
     checkNotFound(role, 'Role not found');
@@ -69,7 +68,7 @@ export class UserController {
   }
 
   static async changeStatus(params: UserChangeStatusDTO): Promise<UserResponseDTO> {
-    const user = await UserService.findUnique({ uuid: params.uuid });
+    const user = await UserService.findUnique({ uuid: params.userUuid });
     checkNotFound(user, 'User not found');
     if (user.role.name !== 'admin') {
       checkForbidden(params.password, 'Wrong password');

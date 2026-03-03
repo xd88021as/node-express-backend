@@ -270,13 +270,13 @@
 
 /**
  * @swagger
- * /user/{uuid}:
+ * /user/{userUuid}:
  *   get:
  *     tags: [User]
  *     summary: 查詢單一使用者
  *     parameters:
  *       - in: path
- *         name: uuid
+ *         name: userUuid
  *         required: true
  *         schema:
  *           type: string
@@ -294,7 +294,7 @@
  *     summary: 修改使用者資料（僅admin或本人）
  *     parameters:
  *       - in: path
- *         name: uuid
+ *         name: userUuid
  *         required: true
  *         schema:
  *           type: string
@@ -316,13 +316,13 @@
 
 /**
  * @swagger
- * /user/{uuid}/password:
+ * /user/{userUuid}/password:
  *   patch:
  *     tags: [User]
  *     summary: 修改密碼（僅admin或本人）
  *     parameters:
  *       - in: path
- *         name: uuid
+ *         name: userUuid
  *         required: true
  *         schema:
  *           type: string
@@ -344,13 +344,13 @@
 
 /**
  * @swagger
- * /user/{uuid}/role:
+ * /user/{userUuid}/role:
  *   patch:
  *     tags: [User]
  *     summary: 修改角色（僅admin）
  *     parameters:
  *       - in: path
- *         name: uuid
+ *         name: userUuid
  *         required: true
  *         schema:
  *           type: string
@@ -372,13 +372,13 @@
 
 /**
  * @swagger
- * /user/{uuid}/status:
+ * /user/{userUuid}/status:
  *   patch:
  *     tags: [User]
  *     summary: 修改使用者狀態（僅admin或本人）
  *     parameters:
  *       - in: path
- *         name: uuid
+ *         name: userUuid
  *         required: true
  *         schema:
  *           type: string

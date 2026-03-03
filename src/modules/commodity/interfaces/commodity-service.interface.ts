@@ -1,0 +1,35 @@
+import { OrderDirection } from '@utils/constants';
+
+export interface CommodityCreateParams {
+  name: string;
+  introduction?: string;
+  currency?: string;
+  price?: string;
+  shopId: number;
+}
+
+export interface CommodityFindUniqueParams {
+  id?: number;
+  uuid?: string;
+}
+
+export interface CommodityFindManyParams {
+  shopId?: number;
+  shopUuid?: string;
+  shopName?: string;
+  currency?: string;
+  createdFrom?: string;
+  createdTo?: string;
+  skip?: number;
+  take?: number;
+  orderBy?: string;
+  orderDirection?: OrderDirection;
+}
+
+export interface CommodityUpdateParams {
+  name?: string;
+  introduction?: string;
+  currency?: string;
+  price?: string;
+  shopId?: number;
+}

@@ -7,8 +7,10 @@ import {
   Index,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { UserEntity } from './user.entity';
+import { CommodityEntity } from './commodity.entity';
 
 @Entity('shop')
 export class ShopEntity {
@@ -40,4 +42,7 @@ export class ShopEntity {
   @ManyToOne(() => UserEntity, { nullable: false })
   @JoinColumn({ name: 'user_id' })
   user!: UserEntity;
+
+  @OneToMany(() => CommodityEntity, (commodity) => commodity.shop)
+  commodities!: CommodityEntity[];
 }

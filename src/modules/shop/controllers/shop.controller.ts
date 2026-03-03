@@ -11,7 +11,7 @@ import { ShopService } from '../services/shop.service';
 
 export class ShopController {
   static async create(params: ShopCreateDTO): Promise<ShopResponseDTO> {
-    const user = await UserService.findUnique({ uuid: params.uuid });
+    const user = await UserService.findUnique({ uuid: params.userUuid });
     checkNotFound(user, 'User not found');
     const shop = await ShopService.create({
       userId: user.id,
@@ -31,7 +31,7 @@ export class ShopController {
   }
 
   static async findUnique(params: ShopFindUniqueDTO): Promise<ShopResponseDTO> {
-    const shop = await ShopService.findUnique(params);
+    const shop = await ShopService.findUnique({ uuid: params.shopUuid });
     checkNotFound(shop, 'Shop not found');
     return ShopResponseDTO.generate(shop);
   }

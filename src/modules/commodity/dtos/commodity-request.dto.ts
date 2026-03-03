@@ -2,39 +2,41 @@ import { OrderDirectionEnum } from '@utils/constants';
 import { Type } from 'class-transformer';
 import { IsDateString, IsEnum, IsInt, IsOptional, IsString, IsUUID } from 'class-validator';
 
-export class ShopCreateDTO {
+export class CommodityCreateDTO {
   @IsUUID()
-  userUuid!: string;
+  shopUuid!: string;
 
   @IsString()
   name!: string;
 
   @IsOptional()
   @IsString()
-  localPhoneNumber?: string;
-
-  @IsOptional()
-  @IsString()
-  mobilePhoneNumber?: string;
-
-  @IsOptional()
-  @IsString()
   introduction?: string;
+
+  @IsString()
+  currency!: string;
+
+  @IsString()
+  price!: string;
 }
 
-export class ShopFindUniqueDTO {
+export class CommodityFindUniqueDTO {
   @IsUUID()
-  shopUuid!: string;
+  commodityUuid!: string;
 }
 
-export class ShopFindManyDTO {
+export class CommodityFindManyDTO {
   @IsOptional()
   @IsString()
-  userUuid?: string;
+  shopUuid?: string;
 
   @IsOptional()
   @IsString()
-  userAccount?: string;
+  shopName?: string;
+
+  @IsOptional()
+  @IsString()
+  currency?: string;
 
   @IsOptional()
   @IsDateString()
@@ -65,9 +67,9 @@ export class ShopFindManyDTO {
   orderDirection?: OrderDirectionEnum;
 }
 
-export class ShopUpdateDTO {
+export class CommodityUpdateDTO {
   @IsUUID()
-  shopUuid!: string;
+  commodityUuid!: string;
 
   @IsOptional()
   @IsString()
@@ -75,13 +77,13 @@ export class ShopUpdateDTO {
 
   @IsOptional()
   @IsString()
-  localPhoneNumber?: string;
-
-  @IsOptional()
-  @IsString()
-  mobilePhoneNumber?: string;
-
-  @IsOptional()
-  @IsString()
   introduction?: string;
+
+  @IsOptional()
+  @IsString()
+  currency?: string;
+
+  @IsOptional()
+  @IsString()
+  price?: string;
 }

@@ -41,7 +41,7 @@ export function requireOwnershipOrRole(options: { roles?: string[]; allowSelf?: 
     const user = (req as RequestWithUser).user;
     checkUnauthorized(user);
     const hasRole = options.roles && options.roles.includes(user.roleName);
-    const isSelf = options.allowSelf && user.userUuid === req.params.uuid;
+    const isSelf = options.allowSelf && user.userUuid === req.params.userUuid;
     checkForbidden(hasRole || isSelf);
     next();
   };

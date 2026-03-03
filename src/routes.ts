@@ -1,4 +1,6 @@
 import authRoutes from '@modules/auth/auth.routes';
+import commodityRoutes from '@modules/commodity/commodity.routes';
+import shopCommodityRoutes from '@modules/commodity/shop-commodity.routes';
 import roleRoutes from '@modules/role/role.routes';
 import shopRoutes from '@modules/shop/shop.routes';
 import toolRoutes from '@modules/tool/tool.routes';
@@ -10,11 +12,13 @@ import { Router } from 'express';
 const router = Router();
 
 router.use('/auth', authRoutes);
+router.use('/commodity', commodityRoutes);
 router.use('/role', roleRoutes);
 router.use('/shop', shopRoutes);
 router.use('/tool', toolRoutes);
 router.use('/user-status', userStatusRoutes);
 router.use('/user', userRoutes);
-router.use('/user/:uuid/shop', userShopRoutes);
+router.use('/user/:userUuid/shop', userShopRoutes);
+router.use('/user/:userUuid/shop/:shopUuid/commodity', shopCommodityRoutes);
 
 export default router;
