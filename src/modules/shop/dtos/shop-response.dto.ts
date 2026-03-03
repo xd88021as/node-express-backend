@@ -1,4 +1,4 @@
-import { Exclude, Expose, plainToInstance, Transform } from 'class-transformer';
+import { Exclude, Expose, plainToInstance } from 'class-transformer';
 
 export class ShopResponseDTO {
   @Expose()
@@ -23,11 +23,9 @@ export class ShopResponseDTO {
   updatedAt!: Date;
 
   @Expose()
-  @Transform(({ obj }) => obj.user?.uuid)
   userUuid!: string;
 
   @Expose()
-  @Transform(({ obj }) => obj.user?.name)
   userName!: string;
 
   @Exclude()

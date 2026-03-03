@@ -49,9 +49,6 @@
  *         uuid:
  *           type: string
  *           description: 商店 UUID
- *         userUuid:
- *           type: string
- *           description: 使用者 UUID
  *         name:
  *           type: string
  *           description: 商店名稱
@@ -72,6 +69,12 @@
  *           type: string
  *           format: date-time
  *           description: 最後更改時間
+ *         userUuid:
+ *           type: string
+ *           description: 使用者 UUID
+ *         userName:
+ *           type: string
+ *           description: 使用者名稱
  *
  *     ShopPaginationResponseDTO:
  *       type: object
@@ -219,7 +222,7 @@
  * @swagger
  * /user/{userUuid}/shop/{shopUuid}:
  *   patch:
- *     summary: 更新指定使用者的商店
+ *     summary: 更新指定使用者的商店（僅admin或本人的商店）
  *     tags: [Shop]
  *     parameters:
  *       - in: path

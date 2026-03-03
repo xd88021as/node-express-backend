@@ -30,7 +30,14 @@ export class CommodityController {
     const skip = params.page && params.limit ? (params.page - 1) * params.limit : undefined;
     const take = params.limit ?? undefined;
     const { commodities, total } = await CommodityService.findMany({ ...params, skip, take });
-    return CommodityPaginationResponseDTO.generate({ commodities, total });
+    return CommodityPaginationResponseDTO.generate({
+      commodities: commodities.map((commodity) => ({
+        ...commodity,
+        shopUuid: commodity.shop.uuid,
+        shopName: commodity.shop.name,
+      })),
+      total,
+    });
   }
 
   static async findUnique(params: CommodityFindUniqueDTO): Promise<CommodityResponseDTO> {

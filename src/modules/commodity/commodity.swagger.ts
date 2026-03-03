@@ -51,10 +51,6 @@
  *       properties:
  *         uuid:
  *           type: string
- *         shopUuid:
- *           type: string
- *         shopName:
- *           type: string
  *         name:
  *           type: string
  *         introduction:
@@ -69,6 +65,10 @@
  *         updatedAt:
  *           type: string
  *           format: date-time
+ *         shopUuid:
+ *           type: string
+ *         shopName:
+ *           type: string
  *
  *     CommodityPaginationResponseDTO:
  *       type: object
@@ -196,7 +196,7 @@
  * @swagger
  * /user/{userUuid}/shop/{shopUuid}/commodity:
  *   post:
- *     summary: 在指定商店建立商品
+ *     summary: 在指定商店建立商品（僅admin或本人的商店）
  *     tags: [Commodity]
  *     parameters:
  *       - in: path
@@ -230,7 +230,7 @@
  * @swagger
  * /user/{userUuid}/shop/{shopUuid}/commodity/{commodityUuid}:
  *   patch:
- *     summary: 更新指定商店的商品
+ *     summary: 更新指定商店的商品（僅admin或本人的商店）
  *     tags: [Commodity]
  *     parameters:
  *       - in: path

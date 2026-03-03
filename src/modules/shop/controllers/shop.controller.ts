@@ -27,7 +27,10 @@ export class ShopController {
     const skip = params.page && params.limit ? (params.page - 1) * params.limit : undefined;
     const take = params.limit ?? undefined;
     const { shops, total } = await ShopService.findMany({ ...params, skip, take });
-    return ShopPaginationResponseDTO.generate({ shops, total });
+    return ShopPaginationResponseDTO.generate({
+      shops: shops.map((shop) => ({ ...shop, userUuid: shop.user.uuid, userName: shop.user.name })),
+      total,
+    });
   }
 
   static async findUnique(params: ShopFindUniqueDTO): Promise<ShopResponseDTO> {
