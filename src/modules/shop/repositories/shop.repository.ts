@@ -14,7 +14,7 @@ export class ShopRepository {
     return repo
       .createQueryBuilder('shop')
       .leftJoinAndSelect('shop.user', 'user')
-      .select(['shop', 'user.uuid', 'user.name']);
+      .select(['shop', 'user']);
   }
 
   static async create(params: CreateParams) {

@@ -12,8 +12,12 @@
  *     ShopCreateDTO:
  *       type: object
  *       required:
+ *         - userUuid
  *         - name
  *       properties:
+ *         userUuid:
+ *           type: string
+ *           description: 使用者 UUID
  *         name:
  *           type: string
  *           description: 商店名稱
@@ -146,6 +150,22 @@
 /**
  * @swagger
  * /shop:
+ *   post:
+ *     summary: 建立使用者的商店（僅admin或本人）
+ *     tags: [Shop]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ShopCreateDTO'
+ *     responses:
+ *       200:
+ *         description: 建立成功
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ShopResponseDTO'
  *   get:
  *     summary: 查詢商店列表
  *     tags: [Shop]
@@ -188,49 +208,10 @@
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ShopResponseDTO'
- */
-
-/**
- * @swagger
- * /user/{userUuid}/shop:
- *   post:
- *     summary: 建立指定使用者的商店
- *     tags: [Shop]
- *     parameters:
- *       - in: path
- *         name: userUuid
- *         required: true
- *         schema:
- *           type: string
- *         description: 使用者 UUID
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/ShopCreateDTO'
- *     responses:
- *       200:
- *         description: 建立成功
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ShopResponseDTO'
- */
-
-/**
- * @swagger
- * /user/{userUuid}/shop/{shopUuid}:
  *   patch:
- *     summary: 更新指定使用者的商店（僅admin或本人的商店）
+ *     summary: 更新商店（僅admin或本人的商店）
  *     tags: [Shop]
  *     parameters:
- *       - in: path
- *         name: userUuid
- *         required: true
- *         schema:
- *           type: string
- *         description: 使用者 UUID
  *       - in: path
  *         name: shopUuid
  *         required: true

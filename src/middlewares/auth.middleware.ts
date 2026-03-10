@@ -4,7 +4,7 @@ import { checkForbidden, checkNotFound, checkUnauthorized } from '@utils/http-er
 import { UserService } from '@modules/user/services/user.service';
 import { AuthService } from '@modules/auth/services/auth.service';
 
-type RequestWithUser = Request & { user?: TokenPayload };
+export type RequestWithUser = Request & { user?: TokenPayload };
 const REFRESH_THRESHOLD_SECONDS = 2 * 60;
 
 export async function authMiddleware(req: Request, res: Response, next: NextFunction) {
@@ -12,6 +12,7 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
     const token = req.headers.authorization?.split(' ')[1];
     const payload = token ? verifyJwt(token) : null;
     checkUnauthorized(payload, 'Invalid token');
+
     const redisToken = await AuthService.getTokenFromRedis(payload.userUuid);
     checkUnauthorized(redisToken && redisToken === token, 'Session expired, please sign in again');
 
@@ -36,13 +37,23 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
   }
 }
 
-export function requireOwnershipOrRole(options: { roles?: string[]; allowSelf?: boolean }) {
-  return (req: Request, _res: Response, next: NextFunction) => {
-    const user = (req as RequestWithUser).user;
-    checkUnauthorized(user);
-    const hasRole = options.roles && options.roles.includes(user.roleName);
-    const isSelf = options.allowSelf && user.userUuid === req.params.userUuid;
-    checkForbidden(hasRole || isSelf);
+export function requireAdmin(req: Request, _res: Response, next: NextFunction) {
+  const user = (req as RequestWithUser).user;
+  checkUnauthorized(user);
+  checkForbidden(user.roleName === 'admin');
+  next();
+}
+
+export function requireAdminOrSelf(req: Request, _res: Response, next: NextFunction) {
+  const user = (req as RequestWithUser).user;
+  checkUnauthorized(user);
+
+  if (user.roleName === 'admin') {
     next();
-  };
+    return;
+  }
+
+  const userUuid = req.params.userUuid || req.body.userUuid;
+  checkForbidden(user.userUuid === userUuid);
+  next();
 }

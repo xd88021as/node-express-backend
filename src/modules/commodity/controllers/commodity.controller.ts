@@ -1,5 +1,5 @@
 import { ShopService } from '@modules/shop/services/shop.service';
-import { checkNotFound } from '@utils/http-error.util';
+import { checkForbidden, checkNotFound } from '@utils/http-error.util';
 import {
   CommodityCreateDTO,
   CommodityFindManyDTO,
@@ -11,11 +11,18 @@ import {
   CommodityResponseDTO,
 } from '../dtos/commodity-response.dto';
 import { CommodityService } from '../services/commodity.service';
+import { TokenPayload } from '@utils/jwt.util';
 
 export class CommodityController {
-  static async create(params: CommodityCreateDTO): Promise<CommodityResponseDTO> {
+  static async create(
+    params: CommodityCreateDTO,
+    tokenPayload: TokenPayload
+  ): Promise<CommodityResponseDTO> {
     const shop = await ShopService.findUnique({ uuid: params.shopUuid });
     checkNotFound(shop, 'Shop not found');
+    const isAdmin = tokenPayload.roleName === 'admin';
+    const isSelf = tokenPayload.userUuid === shop.user.uuid;
+    checkForbidden(isAdmin || isSelf);
     const commodity = await CommodityService.create({
       shopId: shop.id,
       name: params.name,
@@ -23,7 +30,11 @@ export class CommodityController {
       currency: params.currency,
       price: params.price,
     });
-    return CommodityResponseDTO.generate(commodity);
+    return CommodityResponseDTO.generate({
+      ...commodity,
+      shopUuid: shop.uuid,
+      shopName: shop.name,
+    });
   }
 
   static async findMany(params: CommodityFindManyDTO): Promise<CommodityPaginationResponseDTO> {
@@ -43,18 +54,32 @@ export class CommodityController {
   static async findUnique(params: CommodityFindUniqueDTO): Promise<CommodityResponseDTO> {
     const commodity = await CommodityService.findUnique({ uuid: params.commodityUuid });
     checkNotFound(commodity, 'Commodity not found');
-    return CommodityResponseDTO.generate(commodity);
+    return CommodityResponseDTO.generate({
+      ...commodity,
+      shopUuid: commodity.shop.uuid,
+      shopName: commodity.shop.name,
+    });
   }
 
-  static async update(params: CommodityUpdateDTO): Promise<CommodityResponseDTO> {
+  static async update(
+    params: CommodityUpdateDTO,
+    tokenPayload: TokenPayload
+  ): Promise<CommodityResponseDTO> {
     const commodity = await CommodityService.findUnique({ uuid: params.commodityUuid });
     checkNotFound(commodity, 'Commodity not found');
+    const isAdmin = tokenPayload.roleName === 'admin';
+    const isSelf = tokenPayload.userUuid === commodity.shop.user.uuid;
+    checkForbidden(isAdmin || isSelf);
     const newCommodity = await CommodityService.update(commodity.id, {
       name: params.name,
       introduction: params.introduction,
       currency: params.currency,
       price: params.price,
     });
-    return CommodityResponseDTO.generate(newCommodity);
+    return CommodityResponseDTO.generate({
+      ...newCommodity,
+      shopUuid: commodity.shop.uuid,
+      shopName: commodity.shop.name,
+    });
   }
 }

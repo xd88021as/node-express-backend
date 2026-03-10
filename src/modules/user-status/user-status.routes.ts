@@ -3,14 +3,14 @@ import { plainToInstance } from 'class-transformer';
 import { UserStatusController } from './controllers/user-status.controller';
 import { UserStatusCreateDTO, UserStatusUpdateDTO } from './dtos/user-status-request.dto';
 import { validateDTO } from '@middlewares/validate.middleware';
-import { authMiddleware, requireOwnershipOrRole } from '@middlewares/auth.middleware';
+import { authMiddleware, requireAdmin } from '@middlewares/auth.middleware';
 
 const router = Router();
 
 router.post(
   '',
   authMiddleware,
-  requireOwnershipOrRole({ roles: ['admin'] }),
+  requireAdmin,
   validateDTO(UserStatusCreateDTO),
   async (req, res) => {
     const dto = plainToInstance(UserStatusCreateDTO, req.body);
@@ -27,7 +27,7 @@ router.get('', async (req, res) => {
 router.patch(
   '',
   authMiddleware,
-  requireOwnershipOrRole({ roles: ['admin'] }),
+  requireAdmin,
   validateDTO(UserStatusUpdateDTO),
   async (req, res) => {
     const dto = plainToInstance(UserStatusUpdateDTO, req.body);

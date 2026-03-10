@@ -14,7 +14,8 @@ export class CommodityRepository {
     return repo
       .createQueryBuilder('commodity')
       .leftJoinAndSelect('commodity.shop', 'shop')
-      .select(['commodity', 'shop.uuid', 'shop.name', 'shop.id']);
+      .leftJoinAndSelect('shop.user', 'user')
+      .select(['commodity', 'shop', 'user']);
   }
 
   static async create(params: CreateParams) {

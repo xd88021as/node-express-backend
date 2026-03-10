@@ -1,5 +1,5 @@
 import { UserService } from '@modules/user/services/user.service';
-import { checkNotFound } from '@utils/http-error.util';
+import { checkForbidden, checkNotFound } from '@utils/http-error.util';
 import {
   ShopCreateDTO,
   ShopFindManyDTO,
@@ -8,6 +8,7 @@ import {
 } from '../dtos/shop-request.dto';
 import { ShopPaginationResponseDTO, ShopResponseDTO } from '../dtos/shop-response.dto';
 import { ShopService } from '../services/shop.service';
+import { TokenPayload } from '@utils/jwt.util';
 
 export class ShopController {
   static async create(params: ShopCreateDTO): Promise<ShopResponseDTO> {
@@ -20,7 +21,7 @@ export class ShopController {
       mobilePhoneNumber: params.mobilePhoneNumber,
       introduction: params.introduction,
     });
-    return ShopResponseDTO.generate(shop);
+    return ShopResponseDTO.generate({ ...shop, userUuid: user.uuid, userName: user.name });
   }
 
   static async findMany(params: ShopFindManyDTO): Promise<ShopPaginationResponseDTO> {
@@ -36,18 +37,29 @@ export class ShopController {
   static async findUnique(params: ShopFindUniqueDTO): Promise<ShopResponseDTO> {
     const shop = await ShopService.findUnique({ uuid: params.shopUuid });
     checkNotFound(shop, 'Shop not found');
-    return ShopResponseDTO.generate(shop);
+    return ShopResponseDTO.generate({
+      ...shop,
+      userUuid: shop.user.uuid,
+      userName: shop.user.name,
+    });
   }
 
-  static async update(params: ShopUpdateDTO): Promise<ShopResponseDTO> {
+  static async update(params: ShopUpdateDTO, tokenPayload: TokenPayload): Promise<ShopResponseDTO> {
     const shop = await ShopService.findUnique({ uuid: params.shopUuid });
     checkNotFound(shop, 'Shop not found');
+    const isAdmin = tokenPayload.roleName === 'admin';
+    const isSelf = tokenPayload.userUuid === shop.user.uuid;
+    checkForbidden(isAdmin || isSelf);
     const newShop = await ShopService.update(shop.id, {
       name: params.name,
       localPhoneNumber: params.localPhoneNumber,
       mobilePhoneNumber: params.mobilePhoneNumber,
       introduction: params.introduction,
     });
-    return ShopResponseDTO.generate(newShop);
+    return ShopResponseDTO.generate({
+      ...newShop,
+      userUuid: shop.user.uuid,
+      userName: shop.user.name,
+    });
   }
 }

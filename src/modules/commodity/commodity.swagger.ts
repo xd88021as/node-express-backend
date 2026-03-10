@@ -12,10 +12,14 @@
  *     CommodityCreateDTO:
  *       type: object
  *       required:
+ *         - shopUuid
  *         - name
  *         - currency
  *         - price
  *       properties:
+ *         shopUuid:
+ *           type: string
+ *           description: 商店 UUID
  *         name:
  *           type: string
  *           description: 商品名稱
@@ -194,23 +198,10 @@
 
 /**
  * @swagger
- * /user/{userUuid}/shop/{shopUuid}/commodity:
+ * /commodity:
  *   post:
  *     summary: 在指定商店建立商品（僅admin或本人的商店）
  *     tags: [Commodity]
- *     parameters:
- *       - in: path
- *         name: userUuid
- *         required: true
- *         schema:
- *           type: string
- *         description: 使用者 UUID
- *       - in: path
- *         name: shopUuid
- *         required: true
- *         schema:
- *           type: string
- *         description: 商店 UUID
  *     requestBody:
  *       required: true
  *       content:
@@ -228,23 +219,11 @@
 
 /**
  * @swagger
- * /user/{userUuid}/shop/{shopUuid}/commodity/{commodityUuid}:
+ * /commodity/{commodityUuid}:
  *   patch:
- *     summary: 更新指定商店的商品（僅admin或本人的商店）
+ *     summary: 更新商品（僅admin或本人的商店商品）
  *     tags: [Commodity]
  *     parameters:
- *       - in: path
- *         name: userUuid
- *         required: true
- *         schema:
- *           type: string
- *         description: 使用者 UUID
- *       - in: path
- *         name: shopUuid
- *         required: true
- *         schema:
- *           type: string
- *         description: 商店 UUID
  *       - in: path
  *         name: commodityUuid
  *         required: true
