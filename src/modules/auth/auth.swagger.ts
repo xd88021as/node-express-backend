@@ -50,7 +50,7 @@
  *     AuthResponseDTO:
  *       type: object
  *       properties:
- *         userUUid:
+ *         userUuid:
  *           type: string
  *           description: 使用者 UUID
  *         balance:
