@@ -13,6 +13,7 @@ import { RoleService } from '@modules/role/services/role.service';
 import { verifyPassword } from '@utils/crypto.util';
 import { checkForbidden, checkNotFound } from '@utils/http-error.util';
 import { UserStatusService } from '@modules/user-status/services/user-status.service';
+import { TokenPayload } from '@utils/jwt.util';
 
 export class UserController {
   static async create(params: UserCreateDTO): Promise<UserResponseDTO> {
@@ -41,42 +42,64 @@ export class UserController {
     return UserPaginationResponseDTO.generate({ users, total });
   }
 
-  static async update(params: UserUpdateDTO): Promise<UserResponseDTO> {
+  static async update(params: UserUpdateDTO, tokenPayload: TokenPayload): Promise<UserResponseDTO> {
     const user = await UserService.findUnique({ uuid: params.userUuid });
     checkNotFound(user, 'User not found');
+    if (user.role.name === tokenPayload.roleName) {
+      checkForbidden(user.uuid === tokenPayload.userUuid);
+    }
     const newUser = await UserService.update(user.id, { ...params });
     return UserResponseDTO.generate(newUser);
   }
 
-  static async changePassword(params: UserChangePasswordDTO): Promise<UserResponseDTO> {
+  static async changePassword(
+    params: UserChangePasswordDTO,
+    tokenPayload: TokenPayload
+  ): Promise<UserResponseDTO> {
     const user = await UserService.findUnique({ uuid: params.userUuid });
     checkNotFound(user, 'User not found');
-    const verify = verifyPassword(params.oldPassword, user.password);
-    checkForbidden(verify, 'Wrong password');
-
+    if (user.role.name === tokenPayload.roleName) {
+      checkForbidden(user.uuid === tokenPayload.userUuid);
+    }
+    if (tokenPayload.roleName !== 'admin') {
+      const verify = verifyPassword(params.oldPassword, user.password);
+      checkForbidden(verify, 'Wrong password');
+    }
     const updatedUser = await UserService.update(user.id, { password: params.newPassword });
     return UserResponseDTO.generate(updatedUser);
   }
 
-  static async changeRole(params: UserChangeRoleDTO): Promise<UserResponseDTO> {
+  static async changeRole(
+    params: UserChangeRoleDTO,
+    tokenPayload: TokenPayload
+  ): Promise<UserResponseDTO> {
     const user = await UserService.findUnique({ uuid: params.userUuid });
     checkNotFound(user, 'User not found');
     const role = await RoleService.findUnique(params.roleName);
     checkNotFound(role, 'Role not found');
+    if (user.role.name === tokenPayload.roleName) {
+      checkForbidden(user.uuid === tokenPayload.userUuid);
+    }
     const newUser = await UserService.update(user.id, { roleId: role.id });
     return UserResponseDTO.generate(newUser);
   }
 
-  static async changeStatus(params: UserChangeStatusDTO): Promise<UserResponseDTO> {
+  static async changeStatus(
+    params: UserChangeStatusDTO,
+    tokenPayload: TokenPayload
+  ): Promise<UserResponseDTO> {
     const user = await UserService.findUnique({ uuid: params.userUuid });
     checkNotFound(user, 'User not found');
-    if (user.role.name !== 'admin') {
+    const status = await UserStatusService.findUnique(params.statusName);
+    checkNotFound(status, 'Status not found');
+    if (user.role.name === tokenPayload.roleName) {
+      checkForbidden(user.uuid === tokenPayload.userUuid);
+    }
+    if (tokenPayload.roleName !== 'admin') {
       checkForbidden(params.password, 'Wrong password');
       const verify = verifyPassword(params.password, user.password);
       checkForbidden(verify, 'Wrong password');
     }
-    const status = await UserStatusService.findUnique(params.statusName);
-    checkNotFound(status, 'Status not found');
     const newUser = await UserService.update(user.id, { statusId: status.id });
     return UserResponseDTO.generate(newUser);
   }

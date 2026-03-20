@@ -1,5 +1,10 @@
 import { Router } from 'express';
-import { authMiddleware, requireAdminOrSelf, requireAdmin } from 'middlewares/auth.middleware';
+import {
+  authMiddleware,
+  requireAdminOrSelf,
+  requireAdmin,
+  RequestWithUser,
+} from 'middlewares/auth.middleware';
 import { validateDTO } from 'middlewares/validate.middleware';
 import {
   UserChangePasswordDTO,
@@ -12,6 +17,7 @@ import {
 } from './dtos/user-request.dto';
 import { UserController } from './controllers/user.controller';
 import { plainToInstance } from 'class-transformer';
+import { TokenPayload } from '@utils/jwt.util';
 
 const router = Router();
 
@@ -40,7 +46,8 @@ router.patch(
   validateDTO(UserUpdateDTO),
   async (req, res) => {
     const dto = plainToInstance(UserUpdateDTO, { ...req.body, userUuid: req.params.userUuid });
-    const response = await UserController.update(dto);
+    const user = (req as RequestWithUser).user;
+    const response = await UserController.update(dto, user as TokenPayload);
     res.status(200).json(response);
   }
 );
@@ -55,7 +62,8 @@ router.patch(
       ...req.body,
       userUuid: req.params.userUuid,
     });
-    const response = await UserController.changePassword(dto);
+    const user = (req as RequestWithUser).user;
+    const response = await UserController.changePassword(dto, user as TokenPayload);
     return res.status(200).json(response);
   }
 );
@@ -67,7 +75,8 @@ router.patch(
   validateDTO(UserChangeRoleDTO),
   async (req, res) => {
     const dto = plainToInstance(UserChangeRoleDTO, { ...req.body, userUuid: req.params.userUuid });
-    const response = await UserController.changeRole(dto);
+    const user = (req as RequestWithUser).user;
+    const response = await UserController.changeRole(dto, user as TokenPayload);
     return res.status(200).json(response);
   }
 );
@@ -82,7 +91,8 @@ router.patch(
       ...req.body,
       userUuid: req.params.userUuid,
     });
-    const response = await UserController.changeStatus(dto);
+    const user = (req as RequestWithUser).user;
+    const response = await UserController.changeStatus(dto, user as TokenPayload);
     return res.status(200).json(response);
   }
 );

@@ -22,8 +22,13 @@ const options: swaggerJSDoc.Options = {
 - 當 Token 接近過期時（目前門檻：2 分鐘），呼叫需要授權的 API 會自動簽發新 Token，舊的 Token 將失效
 - 新 Token 會回傳在 response headers：\`Authorization\` 與 \`X-Access-Token\`
 
-## admin測試帳號 
-- 因admin帳號目前不提供申請，因此直接提供一組用以測試功能，一般帳號請直接用註冊的
+## Role 規則
+- 共有 admin、user、tester
+- 不能修改同 Role 的其他人
+- admin 可以修改 user、tester
+
+## 測試帳號
+- 因 admin 帳號目前不提供申請，因此直接提供一組用以測試功能，一般帳號請直接用註冊的
 - 帳號：admin01 密碼：123
       `,
     },
