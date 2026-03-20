@@ -31,6 +31,13 @@ router.get('', validateDTO(ShopFindManyDTO), async (req, res) => {
   res.status(200).json(response);
 });
 
+router.get('/:shopUuid/menu', validateDTO(ShopFindUniqueDTO), async (req, res) => {
+  const dto = plainToInstance(ShopFindUniqueDTO, { shopUuid: req.params.shopUuid });
+  const response = await ShopController.generateMenuHtml(dto);
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.status(200).send(response);
+});
+
 router.get('/:shopUuid', validateDTO(ShopFindUniqueDTO), async (req, res) => {
   const dto = plainToInstance(ShopFindUniqueDTO, { shopUuid: req.params.shopUuid });
   const response = await ShopController.findUnique(dto);

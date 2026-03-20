@@ -1,4 +1,5 @@
 import { UserService } from '@modules/user/services/user.service';
+import { CommodityService } from '@modules/commodity/services/commodity.service';
 import { checkForbidden, checkNotFound } from '@utils/http-error.util';
 import {
   ShopCreateDTO,
@@ -9,6 +10,7 @@ import {
 import { ShopPaginationResponseDTO, ShopResponseDTO } from '../dtos/shop-response.dto';
 import { ShopService } from '../services/shop.service';
 import { TokenPayload } from '@utils/jwt.util';
+import { ShopHtml } from '../shop.html';
 
 export class ShopController {
   static async create(params: ShopCreateDTO): Promise<ShopResponseDTO> {
@@ -60,6 +62,22 @@ export class ShopController {
       ...newShop,
       userUuid: shop.user.uuid,
       userName: shop.user.name,
+    });
+  }
+
+  static async generateMenuHtml(params: ShopFindUniqueDTO): Promise<string> {
+    const shop = await ShopService.findUnique({ uuid: params.shopUuid });
+    checkNotFound(shop, 'Shop not found');
+
+    const { commodities } = await CommodityService.findMany({ shopUuid: shop.uuid });
+    return ShopHtml.renderMenuHtml({
+      shop: {
+        name: shop.name,
+        introduction: shop.introduction,
+        localPhoneNumber: shop.localPhoneNumber,
+        mobilePhoneNumber: shop.mobilePhoneNumber,
+      },
+      commodities,
     });
   }
 }
