@@ -5,12 +5,14 @@ import {
   ShopCreateDTO,
   ShopFindManyDTO,
   ShopFindUniqueDTO,
+  ShopMenuDTO,
   ShopUpdateDTO,
 } from '../dtos/shop-request.dto';
 import { ShopPaginationResponseDTO, ShopResponseDTO } from '../dtos/shop-response.dto';
 import { ShopService } from '../services/shop.service';
 import { TokenPayload } from '@utils/jwt.util';
 import { ShopHtml } from '../shop.html';
+import { ShopTranslationService } from '@modules/shop-translation/services/shop-translation.service';
 
 export class ShopController {
   static async create(params: ShopCreateDTO): Promise<ShopResponseDTO> {
@@ -65,19 +67,39 @@ export class ShopController {
     });
   }
 
-  static async generateMenuHtml(params: ShopFindUniqueDTO): Promise<string> {
+  static async generateMenuHtml(params: ShopMenuDTO): Promise<string> {
     const shop = await ShopService.findUnique({ uuid: params.shopUuid });
     checkNotFound(shop, 'Shop not found');
+    const locale = params.lang || 'zh-TW';
 
-    const { commodities } = await CommodityService.findMany({ shopUuid: shop.uuid });
+    const { commodities } = await CommodityService.findMany({
+      shopUuid: shop.uuid,
+      locale,
+    });
+    const shopTranslation = await ShopTranslationService.findUnique({
+      shopId: shop.id,
+      locale,
+    });
+    const commodityTranslations = commodities.map((commodity) => {
+      const commodityTranslation = commodity.translations?.[0];
+      return {
+        name: commodityTranslation?.name ?? commodity.name,
+        introduction: commodityTranslation?.introduction ?? commodity.introduction,
+        currency: commodity.currency,
+        price: commodity.price,
+      };
+    });
+
     return ShopHtml.renderMenuHtml({
       shop: {
-        name: shop.name,
-        introduction: shop.introduction,
+        uuid: shop.uuid,
+        name: shopTranslation?.name ?? shop.name,
+        introduction: shopTranslation?.introduction ?? shop.introduction,
         localPhoneNumber: shop.localPhoneNumber,
         mobilePhoneNumber: shop.mobilePhoneNumber,
       },
-      commodities,
+      commodities: commodityTranslations,
+      lang: params.lang,
     });
   }
 }

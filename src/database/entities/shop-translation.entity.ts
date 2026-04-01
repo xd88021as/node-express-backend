@@ -7,19 +7,18 @@ import {
   Index,
   ManyToOne,
   JoinColumn,
-  OneToMany,
 } from 'typeorm';
 import { ShopEntity } from './shop.entity';
-import { CommodityTranslationEntity } from './commodity-translation.entity';
 
-@Entity('commodity')
-export class CommodityEntity {
+@Entity('shop_translation')
+@Index(['shop', 'locale'], { unique: true })
+export class ShopTranslationEntity {
   @PrimaryGeneratedColumn('increment')
   id!: number;
 
-  @Column({ type: 'uuid', default: () => 'gen_random_uuid()' })
+  @Column({ type: 'varchar', length: 20 })
   @Index()
-  uuid!: string;
+  locale!: string;
 
   @Column({ type: 'varchar', length: 255 })
   name!: string;
@@ -27,22 +26,13 @@ export class CommodityEntity {
   @Column({ type: 'text', nullable: true })
   introduction?: string;
 
-  @Column({ type: 'varchar', length: 20, default: 'TWD' })
-  currency!: string;
-
-  @Column({ type: 'numeric', precision: 20, scale: 2, default: '0.00' })
-  price!: string;
-
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', name: 'created_at' })
   createdAt!: Date;
 
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', name: 'updated_at' })
   updatedAt!: Date;
 
-  @ManyToOne(() => ShopEntity, { nullable: false })
+  @ManyToOne(() => ShopEntity, (shop) => shop.translations, { nullable: false })
   @JoinColumn({ name: 'shop_id' })
   shop!: ShopEntity;
-
-  @OneToMany(() => CommodityTranslationEntity, (translation) => translation.commodity)
-  translations!: CommodityTranslationEntity[];
 }

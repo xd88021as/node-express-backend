@@ -26,7 +26,7 @@ export class ShopService {
   }
 
   static async findMany(params: ShopFindManyParams) {
-    const searchParams = {
+    const findParams = {
       userId: params.userId,
       userUuid: params.userUuid,
       userAccount: params.userAccount,
@@ -37,7 +37,7 @@ export class ShopService {
       orderBy: params.orderBy,
       orderDirection: params.orderDirection,
     };
-    const { data, total } = await ShopRepository.findMany(searchParams);
+    const { data, total } = await ShopRepository.findMany(findParams);
     return { shops: data, total };
   }
 

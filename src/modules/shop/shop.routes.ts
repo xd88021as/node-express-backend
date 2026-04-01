@@ -6,6 +6,7 @@ import {
   ShopCreateDTO,
   ShopFindManyDTO,
   ShopFindUniqueDTO,
+  ShopMenuDTO,
   ShopUpdateDTO,
 } from './dtos/shop-request.dto';
 import { authMiddleware, RequestWithUser, requireAdminOrSelf } from '@middlewares/auth.middleware';
@@ -31,8 +32,8 @@ router.get('', validateDTO(ShopFindManyDTO), async (req, res) => {
   res.status(200).json(response);
 });
 
-router.get('/:shopUuid/menu', validateDTO(ShopFindUniqueDTO), async (req, res) => {
-  const dto = plainToInstance(ShopFindUniqueDTO, { shopUuid: req.params.shopUuid });
+router.get('/:shopUuid/menu', validateDTO(ShopMenuDTO), async (req, res) => {
+  const dto = plainToInstance(ShopMenuDTO, { shopUuid: req.params.shopUuid, ...req.query });
   const response = await ShopController.generateMenuHtml(dto);
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.status(200).send(response);

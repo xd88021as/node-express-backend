@@ -1,25 +1,21 @@
 import { OrderDirection } from '@utils/constants';
 
 export interface CreateParams {
+  locale: string;
   name: string;
   introduction?: string;
-  currency?: string;
-  price?: string;
-  shop: { id: number };
+  commodity: { id: number };
 }
 
 export interface FindUniqueParams {
-  id?: number;
-  uuid?: string;
-  locale?: string;
+  commodityId: number;
+  locale: string;
 }
 
 export interface FindManyParams {
-  shopId?: number;
-  shopUuid?: string;
-  shopName?: string;
+  commodityId?: number;
+  commodityIds?: number[];
   locale?: string;
-  currency?: string;
   createdFrom?: Date;
   createdTo?: Date;
   skip?: number;
@@ -29,9 +25,8 @@ export interface FindManyParams {
 }
 
 export interface UpdateParams {
+  locale?: string;
   name?: string;
   introduction?: string;
-  currency?: string;
-  price?: string;
-  shop?: { id: number };
+  commodity?: { id: number };
 }

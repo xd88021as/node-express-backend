@@ -10,12 +10,25 @@ import {
 const repo = AppDataSource.getRepository(CommodityEntity);
 
 export class CommodityRepository {
-  static createQueryBuilder() {
-    return repo
+  static createQueryBuilder(locale?: string) {
+    const query = repo
       .createQueryBuilder('commodity')
       .leftJoinAndSelect('commodity.shop', 'shop')
       .leftJoinAndSelect('shop.user', 'user')
       .select(['commodity', 'shop', 'user']);
+
+    if (locale) {
+      query
+        .leftJoinAndSelect(
+          'commodity.translations',
+          'commodity_translation',
+          'commodity_translation.locale = :locale',
+          { locale }
+        )
+        .addSelect(['commodity_translation']);
+    }
+
+    return query;
   }
 
   static async create(params: CreateParams) {
@@ -25,7 +38,7 @@ export class CommodityRepository {
   }
 
   static async findUnique(params: FindUniqueParams) {
-    const query = this.createQueryBuilder();
+    const query = this.createQueryBuilder(params.locale);
     if (params.id) {
       query.where('commodity.id = :id', { id: params.id });
     } else if (params.uuid) {
@@ -35,7 +48,7 @@ export class CommodityRepository {
   }
 
   static async findMany(params: FindManyParams) {
-    const query = this.createQueryBuilder();
+    const query = this.createQueryBuilder(params.locale);
     if (params.shopId) {
       query.andWhere('shop.id = :shopId', { shopId: params.shopId });
     }

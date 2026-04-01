@@ -1,49 +1,29 @@
 import { OrderDirectionEnum } from '@utils/constants';
 import { Type } from 'class-transformer';
-import { IsDateString, IsEnum, IsIn, IsInt, IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsDateString, IsEnum, IsInt, IsOptional, IsString, IsUUID } from 'class-validator';
 
-export class ShopCreateDTO {
+export class ShopTranslationCreateDTO {
   @IsUUID()
-  userUuid!: string;
+  shopUuid!: string;
+
+  @IsString()
+  locale!: string;
 
   @IsString()
   name!: string;
 
   @IsOptional()
   @IsString()
-  localPhoneNumber?: string;
-
-  @IsOptional()
-  @IsString()
-  mobilePhoneNumber?: string;
-
-  @IsOptional()
-  @IsString()
   introduction?: string;
 }
 
-export class ShopFindUniqueDTO {
-  @IsUUID()
-  shopUuid!: string;
-}
-
-export class ShopMenuDTO {
+export class ShopTranslationFindManyDTO {
   @IsUUID()
   shopUuid!: string;
 
   @IsOptional()
-  @IsIn(['zh-TW', 'en', 'ja', 'ko'])
-  lang?: 'zh-TW' | 'en' | 'ja' | 'ko';
-}
-
-export class ShopFindManyDTO {
-  @IsOptional()
   @IsString()
-  userUuid?: string;
-
-  @IsOptional()
-  @IsString()
-  userAccount?: string;
+  locale?: string;
 
   @IsOptional()
   @IsDateString()
@@ -74,9 +54,12 @@ export class ShopFindManyDTO {
   orderDirection?: OrderDirectionEnum;
 }
 
-export class ShopUpdateDTO {
+export class ShopTranslationUpdateDTO {
   @IsUUID()
   shopUuid!: string;
+
+  @IsString()
+  targetLocale!: string;
 
   @IsOptional()
   @IsString()
@@ -84,11 +67,7 @@ export class ShopUpdateDTO {
 
   @IsOptional()
   @IsString()
-  localPhoneNumber?: string;
-
-  @IsOptional()
-  @IsString()
-  mobilePhoneNumber?: string;
+  newLocale?: string;
 
   @IsOptional()
   @IsString()

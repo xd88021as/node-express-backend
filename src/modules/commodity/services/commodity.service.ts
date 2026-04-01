@@ -26,10 +26,11 @@ export class CommodityService {
   }
 
   static async findMany(params: CommodityFindManyParams) {
-    const searchParams = {
+    const fingParams = {
       shopId: params.shopId,
       shopUuid: params.shopUuid,
       shopName: params.shopName,
+      locale: params.locale,
       currency: params.currency,
       createdFrom: parseDateString(params.createdFrom),
       createdTo: parseDateString(params.createdTo),
@@ -38,7 +39,7 @@ export class CommodityService {
       orderBy: params.orderBy,
       orderDirection: params.orderDirection,
     };
-    const { data, total } = await CommodityRepository.findMany(searchParams);
+    const { data, total } = await CommodityRepository.findMany(fingParams);
     return { commodities: data, total };
   }
 

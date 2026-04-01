@@ -33,7 +33,7 @@ export class UserService {
   }
 
   static async findMany(params: UserFindManyParams) {
-    const searchParams = {
+    const findParams = {
       currency: params.currency,
       statusName: params.statusName,
       roleName: params.roleName,
@@ -44,7 +44,7 @@ export class UserService {
       orderBy: params.orderBy,
       orderDirection: params.orderDirection,
     };
-    const { data, total } = await UserRepository.findMany(searchParams);
+    const { data, total } = await UserRepository.findMany(findParams);
     return { users: data, total };
   }
 

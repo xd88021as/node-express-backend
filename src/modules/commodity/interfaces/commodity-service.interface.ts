@@ -11,12 +11,14 @@ export interface CommodityCreateParams {
 export interface CommodityFindUniqueParams {
   id?: number;
   uuid?: string;
+  locale?: string;
 }
 
 export interface CommodityFindManyParams {
   shopId?: number;
   shopUuid?: string;
   shopName?: string;
+  locale?: string;
   currency?: string;
   createdFrom?: string;
   createdTo?: string;
