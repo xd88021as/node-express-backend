@@ -33,6 +33,9 @@ export class CommodityEntity {
   @Column({ type: 'numeric', precision: 20, scale: 2, default: '0.00' })
   price!: string;
 
+  @Column({ type: 'int', default: 99, name: 'sort_order' })
+  sortOrder!: number;
+
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', name: 'created_at' })
   createdAt!: Date;
 

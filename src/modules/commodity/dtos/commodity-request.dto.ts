@@ -18,6 +18,11 @@ export class CommodityCreateDTO {
 
   @IsString()
   price!: string;
+
+  @IsOptional()
+  @IsInt()
+  @Type(() => Number)
+  sortOrder?: number;
 }
 
 export class CommodityFindUniqueDTO {
@@ -86,4 +91,9 @@ export class CommodityUpdateDTO {
   @IsOptional()
   @IsString()
   price?: string;
+
+  @IsOptional()
+  @IsInt()
+  @Type(() => Number)
+  sortOrder?: number;
 }

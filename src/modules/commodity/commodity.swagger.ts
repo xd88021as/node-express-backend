@@ -33,6 +33,10 @@
  *         price:
  *           type: string
  *           description: 價格
+ *         sortOrder:
+ *           type: integer
+ *           description: 商品排序順位
+ *           default: 99
  *
  *     CommodityUpdateDTO:
  *       type: object
@@ -49,6 +53,9 @@
  *         price:
  *           type: string
  *           description: 價格
+ *         sortOrder:
+ *           type: integer
+ *           description: 商品排序順位
  *
  *     CommodityResponseDTO:
  *       type: object
@@ -63,6 +70,8 @@
  *           type: string
  *         price:
  *           type: string
+ *         sortOrder:
+ *           type: integer
  *         createdAt:
  *           type: string
  *           format: date-time

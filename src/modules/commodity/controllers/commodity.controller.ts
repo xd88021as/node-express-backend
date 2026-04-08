@@ -29,6 +29,7 @@ export class CommodityController {
       introduction: params.introduction,
       currency: params.currency,
       price: params.price,
+      sortOrder: params.sortOrder,
     });
     return CommodityResponseDTO.generate({
       ...commodity,
@@ -75,6 +76,7 @@ export class CommodityController {
       introduction: params.introduction,
       currency: params.currency,
       price: params.price,
+      sortOrder: params.sortOrder,
     });
     return CommodityResponseDTO.generate({
       ...newCommodity,

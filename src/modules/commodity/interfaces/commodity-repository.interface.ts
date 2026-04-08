@@ -5,6 +5,7 @@ export interface CreateParams {
   introduction?: string;
   currency?: string;
   price?: string;
+  sortOrder?: number;
   shop: { id: number };
 }
 
@@ -33,5 +34,6 @@ export interface UpdateParams {
   introduction?: string;
   currency?: string;
   price?: string;
+  sortOrder?: number;
   shop?: { id: number };
 }

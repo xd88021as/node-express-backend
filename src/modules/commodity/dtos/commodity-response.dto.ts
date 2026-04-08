@@ -17,6 +17,9 @@ export class CommodityResponseDTO {
   price!: string;
 
   @Expose()
+  sortOrder!: number;
+
+  @Expose()
   createdAt!: Date;
 
   @Expose()

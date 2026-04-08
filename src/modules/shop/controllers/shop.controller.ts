@@ -75,6 +75,7 @@ export class ShopController {
     const { commodities } = await CommodityService.findMany({
       shopUuid: shop.uuid,
       locale,
+      orderBy: 'sort_order',
     });
     const shopTranslation = await ShopTranslationService.findUnique({
       shopId: shop.id,

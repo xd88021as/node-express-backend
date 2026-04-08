@@ -14,6 +14,7 @@ export class CommodityService {
       introduction: params.introduction,
       currency: params.currency,
       price: params.price,
+      sortOrder: params.sortOrder,
       shop: { id: params.shopId },
     };
     const commodity = await CommodityRepository.create(createParams);
@@ -49,6 +50,7 @@ export class CommodityService {
       introduction: params.introduction,
       currency: params.currency,
       price: params.price,
+      sortOrder: params.sortOrder,
       ...(params.shopId ? { shop: { id: params.shopId } } : {}),
     };
     const commodity = await CommodityRepository.update(id, updateParams);

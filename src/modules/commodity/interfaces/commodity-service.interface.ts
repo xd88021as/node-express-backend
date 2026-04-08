@@ -5,6 +5,7 @@ export interface CommodityCreateParams {
   introduction?: string;
   currency?: string;
   price?: string;
+  sortOrder?: number;
   shopId: number;
 }
 
@@ -33,5 +34,6 @@ export interface CommodityUpdateParams {
   introduction?: string;
   currency?: string;
   price?: string;
+  sortOrder?: number;
   shopId?: number;
 }
